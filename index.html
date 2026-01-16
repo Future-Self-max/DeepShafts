@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Idle Miner: Cartoon Tycoon Deluxe</title>
+    <title>DeepShaft</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@700&display=swap');
 
@@ -3021,8 +3021,8 @@
 
     <div id="orientation-warning">
         <i>📱</i>
-        <h2>Bitte das Handy drehen</h2>
-        <p>Dieses Spiel lässt sich am besten im Querformat spielen!</p>
+        <h2>Please rotate your phone</h2>
+        <p>This game is best played in landscape mode!</p>
     </div>
 
     <div id="ui-layer">
@@ -3046,13 +3046,13 @@
                 <div style="font-size:30px;">🗺️</div> <span class="nav-text">MAP</span>
             </div>
             <div class="nav-btn" onclick="game.openResearch()">
-                <div style="font-size:30px;">🧪</div> <span class="nav-text">FORSCHUNG</span>
+                <div style="font-size:30px;">🧪</div> <span class="nav-text">RESEARCH</span>
             </div>
             <div class="nav-btn" onclick="game.openShop()">
                 <div style="font-size:30px;">🛒</div> <span class="nav-text">SHOP</span>
             </div>
             <div class="nav-btn" onclick="game.openSettings()" id="settings-mobile-btn">
-                <div style="font-size:30px;">⚙️</div> <span class="nav-text">SETTING</span>
+                <div style="font-size:30px;">⚙️</div> <span class="nav-text">SETTINGS</span>
             </div>
         </div>
         <div id="modal-overlay">
@@ -3564,10 +3564,10 @@
         };
 
         const WORLDS = [
-            { idx: 0, id: 'COAL', name: 'Kohlemine', cost: 0, mult: 1, css: { skyTop: '#4FC3F7', skyBot: '#B3E5FC', earth: '#3E2723', dirt: '#5D4037', grass: '#43A047' } },
-            { idx: 1, id: 'GOLD', name: 'Goldmine', cost: 1e12, mult: 50, css: { skyTop: '#FFF59D', skyBot: '#FFF9C4', earth: '#5D4037', dirt: '#795548', grass: '#FBC02D' } },
-            { idx: 2, id: 'RUBY', name: 'Rubinmine', cost: 1e15, mult: 2500, css: { skyTop: '#F48FB1', skyBot: '#FCE4EC', earth: '#4A148C', dirt: '#880E4F', grass: '#D81B60' } },
-            { idx: 3, id: 'MOON', name: 'Mondbasis', cost: 1e17, mult: 10000, css: { skyTop: '#263238', skyBot: '#000000', earth: '#212121', dirt: '#424242', grass: '#616161' } }
+            { idx: 0, id: 'COAL', name: 'Coal Mine', cost: 0, mult: 1, css: { skyTop: '#4FC3F7', skyBot: '#B3E5FC', earth: '#3E2723', dirt: '#5D4037', grass: '#43A047' } },
+            { idx: 1, id: 'GOLD', name: 'Gold Mine', cost: 1e12, mult: 50, css: { skyTop: '#FFF59D', skyBot: '#FFF9C4', earth: '#5D4037', dirt: '#795548', grass: '#FBC02D' } },
+            { idx: 2, id: 'RUBY', name: 'Ruby Mine', cost: 1e15, mult: 2500, css: { skyTop: '#F48FB1', skyBot: '#FCE4EC', earth: '#4A148C', dirt: '#880E4F', grass: '#D81B60' } },
+            { idx: 3, id: 'MOON', name: 'Moon Base', cost: 1e17, mult: 10000, css: { skyTop: '#263238', skyBot: '#000000', earth: '#212121', dirt: '#424242', grass: '#616161' } }
         ];
 
         /* --- RESEARCH TREE SYSTEM --- */
@@ -5546,10 +5546,10 @@
                 const popup = document.createElement('div');
                 popup.className = 'welcome-popup';
                 popup.innerHTML = `
-                    <h2>🎉 Willkommen zurück!</h2>
-                    <p>Du warst ${mins} Minuten weg</p>
+                    <h2>🎉 Welcome back!</h2>
+                    <p>You were away for ${mins} minutes</p>
                     <div class="welcome-earnings">+$${fmt(earnings)}</div>
-                    <button class="btn-buy-upgrade" onclick="this.parentElement.remove()">Super!</button>
+                    <button class="btn-buy-upgrade" onclick="this.parentElement.remove()">Awesome!</button>
                 `;
                 document.body.appendChild(popup);
             }
@@ -6042,13 +6042,13 @@
                                 <div class="shop-item-price">💎 50</div>
                             </div>
                         </div>
-                        <p style="text-align:center;color:#69F0AE;font-weight:bold;">Dein SuperCash: 💎 ${this.superCash}</p>
+                        <p style="text-align:center;color:#69F0AE;font-weight:bold;">Your SuperCash: 💎 ${this.superCash}</p>
                     `;
                     $('#popup-buy-btn').style.display = 'none';
                     return;
                 }
                 if (this.modalMode === 'settings') {
-                    $('#popup-title').innerText = '⚙️ Einstellungen';
+                    $('#popup-title').innerText = '⚙️ Settings';
                     $('#popup-stats').innerHTML = `
                         <style>
                             .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 8px; }
@@ -6060,7 +6060,7 @@
                         </style>
 
                         <div class="settings-row">
-                            <span>🎵 Musik</span>
+                            <span>🎵 Music</span>
                             <div class="toggle-switch ${this.audio.musicEnabled ? 'on' : ''}" onclick="game.toggleMusic()"></div>
                         </div>
                         
@@ -6074,7 +6074,7 @@
                         </div>
 
                         <div class="settings-row">
-                            <span>🔊 Sound-Effekte</span>
+                            <span>🔊 Sound Effects</span>
                             <div class="toggle-switch ${this.audio.sfxEnabled ? 'on' : ''}" onclick="game.toggleSFX()"></div>
                         </div>
                         
@@ -6088,11 +6088,11 @@
                         </div>
 
                         <div class="settings-row">
-                            <span>📊 Statistiken</span>
-                            <span style="color:#666;">Schächte: ${this.shafts.length} | Total: $${fmt(this.money)}</span>
+                            <span>📊 Statistics</span>
+                            <span style="color:#666;">Shafts: ${this.shafts.length} | Total: $${fmt(this.money)}</span>
                         </div>
                         <div class="settings-row">
-                            <span>💾 Spielstand</span>
+                            <span>💾 Game Save</span>
                             <button class="btn-upgrade-simple btn-danger" onclick="game.resetGame()">Reset</button>
                         </div>
                     `;
@@ -6100,7 +6100,7 @@
                     return;
                 }
                 if (this.modalMode === 'map') {
-                    $('#popup-title').innerText = '🗺️ Weltkarte';
+                    $('#popup-title').innerText = '🗺️ World Map';
                     let html = '<div class="shop-grid" style="display:flex; flex-direction:column; gap:10px;">';
                     WORLDS.forEach(w => {
                         let locked = this.money < w.cost && this.worldId < w.idx;
@@ -6113,12 +6113,12 @@
                                 onclick="${canUnlock ? 'game.performPrestige(' + w.idx + ')' : ''}">
                                 <div style="display:flex; justify-content:space-between; align-items:center;">
                                     <div>
-                                        <div style="font-size:1.2rem; font-weight:bold; color:${active ? '#FFF' : '#ECEFF1'}">${w.name} ${active ? '(Aktiv)' : ''}</div>
-                                        <div style="font-size:0.9rem; color:#CFD8DC;">${locked ? 'Benötigt: $' + fmt(w.cost) : (active ? 'Aktueller Multiplikator: x' + this.prestigeMult : '🚀 PRESTIGE: x' + w.mult + ' Einnahmen')}</div>
+                                        <div style="font-size:1.2rem; font-weight:bold; color:${active ? '#FFF' : '#ECEFF1'}">${w.name} ${active ? '(Active)' : ''}</div>
+                                        <div style="font-size:0.9rem; color:#CFD8DC;">${locked ? 'Required: $' + fmt(w.cost) : (active ? 'Current Multiplier: x' + this.prestigeMult : '🚀 PRESTIGE: x' + w.mult + ' Earnings')}</div>
                                     </div>
                                     <div style="font-size:2rem;">${w.id === 'MOON' ? '🌑' : (w.id === 'RUBY' ? '🔻' : (w.id === 'GOLD' ? '🏆' : '🌲'))}</div>
                                 </div>
-                                ${canUnlock ? `<div style="margin-top:5px; padding:5px; background:#D32F2F; color:white; font-size:0.8rem; border-radius:4px; text-transform:uppercase; font-weight:bold; text-align:center;">Jetzt Verkaufen & Neustarten</div>` : ''}
+                                ${canUnlock ? `<div style="margin-top:5px; padding:5px; background:#D32F2F; color:white; font-size:0.8rem; border-radius:4px; text-transform:uppercase; font-weight:bold; text-align:center;">Sell Now & Restart</div>` : ''}
                             </div>
                         `;
                     });
@@ -6128,7 +6128,7 @@
                     return;
                 }
                 if (this.modalMode === 'hire') {
-                    $('#popup-title').innerText = '👔 Manager anheuern';
+                    $('#popup-title').innerText = '👔 Hire Manager';
                     const jrCost = this.getManagerCost('JUNIOR', this.activeUpgradeTarget, this.activeUpgradeId);
                     const srCost = this.getManagerCost('SENIOR', this.activeUpgradeTarget, this.activeUpgradeId);
                     const exCost = this.getManagerCost('EXECUTIVE', this.activeUpgradeTarget, this.activeUpgradeId);
@@ -6209,19 +6209,19 @@
                     cost = Math.floor(CFG.baseCostEle * Math.pow(1.25, e.level));
 
                     // Show capacity (always increases)
-                    statsHtml += row("Kapazität", e.cap, e.cap * 1.3);
+                    statsHtml += row("Capacity", e.cap, e.cap * 1.3);
 
                     // Show speed (only if it will change - before level 25)
                     if (e.level < 25) {
-                        statsHtml += row("Geschwindigkeit", e.speed, e.speed + 10);
+                        statsHtml += row("Speed", e.speed, e.speed + 10);
                     } else {
-                        statsHtml += `<div class="stats-row"><span>Geschwindigkeit</span><span>${e.speed} <span style="color:#FFB74D">⚠️ MAX</span></span></div>`;
+                        statsHtml += `<div class="stats-row"><span>Speed</span><span>${e.speed} <span style="color:#FFB74D">⚠️ MAX</span></span></div>`;
                     }
 
                     // Show load rate (always increases)
                     let currentLoadRate = e.loadRate;
                     let nextLoadRate = 50 + ((e.level + 1) * 10);
-                    statsHtml += row("Ladegeschw./s", currentLoadRate, nextLoadRate);
+                    statsHtml += row("Loading Speed/s", currentLoadRate, nextLoadRate);
                 } else {
                     let w = this.warehouse; title = "Warehouse"; cost = Math.floor(CFG.baseCostWH * Math.pow(1.25, w.level));
                     statsHtml += row("Load", w.transporters[0].cap, w.transporters[0].cap * 1.3);
@@ -6240,14 +6240,14 @@
             }
             buyBoost(type) {
                 if (this.superCash >= 10) {
-                    if (this.boosts[type]) { alert('Bereits aktiv!'); return; }
+                    if (this.boosts[type]) { alert('Already active!'); return; }
                     this.superCash -= 10;
                     this.boosts[type] = true;
                     this.recalcAll(); // Apply new boost immediately
                     this.renderModal();
                 } else {
 
-                    alert('Nicht genug SuperCash! 💎');
+                    alert('Not enough SuperCash! 💎');
                 }
             }
 
@@ -6263,7 +6263,7 @@
                     this.elevDepot = 0;
                     this.renderModal();
                 } else {
-                    alert('Nicht genug SuperCash! 💎');
+                    alert('Not enough SuperCash! 💎');
                 }
             }
             buyManager() {
@@ -6272,7 +6272,7 @@
                     this.warehouse.spawnTransporter();
                     this.renderModal();
                 } else {
-                    alert('Nicht genug SuperCash! 💎');
+                    alert('Not enough SuperCash! 💎');
                 }
             }
             toggleSound() {
@@ -6296,7 +6296,7 @@
 
             resetGame() {
 
-                if (confirm('Spielstand wirklich löschen?')) {
+                if (confirm('Really clear game progress?')) {
                     localStorage.removeItem('idleMinerSave');
                     location.reload();
                 }
@@ -6348,7 +6348,7 @@
             performPrestige(idx) {
                 const w = WORLDS[idx];
                 if (this.money >= w.cost) {
-                    if (confirm(`Welt wechseln zu ${w.name}? \nAchtung: Alles wird zurückgesetzt! Du behältst nur SuperCash, aber dein Einkommen wird x${w.mult} multipliziert!`)) {
+                    if (confirm(`Switch world to ${w.name}? \nWarning: Everything will be reset! You only keep SuperCash, but your income will be multiplied by x${w.mult}!`)) {
                         // RESET
                         this.money = 100;
                         this.shafts = [];
@@ -6376,9 +6376,9 @@
                         this.showWelcomeBack(0, 0); // Reuse popup for "Welcome to New World"
                         const p = document.querySelector('.welcome-popup');
                         if (p) {
-                            p.querySelector('h2').innerText = '🚀 Neue Welt!';
-                            p.querySelector('p').innerText = `Willkommen in der ${w.name}!`;
-                            p.querySelector('.welcome-earnings').innerText = `x${w.mult} Einkommen`;
+                            p.querySelector('h2').innerText = '🚀 New World!';
+                            p.querySelector('p').innerText = `Welcome to ${w.name}!`;
+                            p.querySelector('.welcome-earnings').innerText = `x${w.mult} Earnings`;
                         }
                         this.audio.playSFX('newWorld');
                     }
@@ -6452,7 +6452,7 @@
 
                     this.closeModal();
                 } else {
-                    alert("Nicht genug Ressourcen!");
+                    alert("Not enough resources!");
                 }
             }
             createParticle(x, y) {
