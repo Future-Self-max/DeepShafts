@@ -120,9 +120,7 @@
             }
 
 
-            .btn-settings-top {
-                display: none !important;
-            }
+
 
             #world-container,
             #world-container * {
@@ -538,6 +536,334 @@
             transform: rotate(45deg) scale(1.1);
             background: rgba(0, 0, 0, 0.6);
             border-color: white;
+        }
+
+
+        /* --- MISSION SYSTEM UI --- */
+        .mission-widget {
+            position: absolute;
+            top: 60px;
+            /* Below HUD - Top Center */
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            /* Wider for desktop text */
+            background: rgba(33, 33, 33, 0.95);
+            border: 1px solid var(--accent-gold);
+            border-radius: 12px;
+            z-index: 4000;
+            font-family: var(--font-body);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mission-widget.expanded {
+            height: auto;
+            max-height: 80vh;
+        }
+
+        /* MOBILE OVERRIDES (Includes Landscape Phones) */
+        @media screen and (max-width: 1024px) {
+            .mission-widget {
+                top: 80px !important;
+                right: 10px !important;
+                bottom: auto !important;
+                left: auto !important;
+
+                /* Default Collapsed State: Scaled Down */
+                transform: scale(0.6) !important;
+                transform-origin: top right !important;
+
+                width: 50px !important;
+                height: 50px !important;
+                border-radius: 50%;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                font-size: 14px !important;
+            }
+
+            /* EXPANDED STATE: Reset Scale & Full Size */
+            .mission-widget.expanded {
+                transform: scale(1.0) !important;
+                /* RESET SCALE */
+                transform-origin: top right !important;
+                width: 300px !important;
+                /* Wider */
+                height: auto !important;
+                max-height: 60vh !important;
+                border-radius: 12px;
+                justify-content: flex-start;
+                align-items: stretch;
+                overflow-y: auto;
+            }
+
+            .mission-widget.expanded .mission-item {
+                padding: 10px;
+                gap: 5px;
+            }
+
+            .mission-widget.expanded .mission-name {
+                font-size: 0.9rem;
+            }
+
+            /* HIDE CONTENT WHEN COLLAPSED */
+            .mission-widget:not(.expanded) .mission-info-compact,
+            .mission-widget:not(.expanded) .mission-toggle-btn {
+                display: none;
+            }
+
+            /* Ensure header fills width when collapsed */
+            .mission-widget:not(.expanded) .mission-header-compact {
+                padding: 0;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .mission-header-compact {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            cursor: pointer;
+            gap: 10px;
+            background: linear-gradient(90deg, rgba(255, 193, 7, 0.1), transparent);
+        }
+
+        .mission-header-compact:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .mission-icon-main {
+            font-size: 24px;
+            display: flex;
+            /* Centering fix */
+            justify-content: center;
+            align-items: center;
+            animation: pulse-mission-icon 2s infinite;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .mission-widget:not(.expanded) .mission-icon-main {
+                font-size: 24px !important;
+                /* Normal size inside scaled widget */
+            }
+        }
+
+        @keyframes pulse-mission-icon {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+                filter: drop-shadow(0 0 5px gold);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .mission-info-compact {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .mission-title-compact {
+            font-size: 0.85rem;
+            color: #fff;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mission-progress-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .mission-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #69F0AE, #00C853);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .mission-toggle-btn {
+            color: var(--accent-gold);
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .mission-widget.expanded .mission-toggle-btn {
+            transform: rotate(180deg);
+        }
+
+        /* EXPANDED LIST */
+        .mission-list-container {
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+            gap: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .mission-widget.expanded .mission-list-container {
+            display: flex;
+        }
+
+        .mission-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border: 1px solid transparent;
+            transition: background 0.2s;
+        }
+
+        .mission-item.completed {
+            background: rgba(105, 240, 174, 0.15);
+            border-color: #69F0AE;
+            box-shadow: 0 0 10px rgba(105, 240, 174, 0.2);
+        }
+
+        .mission-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mission-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #eceff1;
+        }
+
+        .mission-reward {
+            font-size: 0.8rem;
+            color: var(--accent-supercash);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 230, 118, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .mission-status-text {
+            font-size: 0.75rem;
+            color: #B0BEC5;
+            text-align: right;
+        }
+
+        .btn-claim-mission {
+            background: linear-gradient(135deg, #FFD54F, #FF6F00);
+            border: none;
+            color: #3E2723;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            animation: pulse-claim 1s infinite;
+            width: 100%;
+        }
+
+        @keyframes pulse-claim {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(255, 193, 7, 0);
+            }
+
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(255, 193, 7, 0);
+            }
+        }
+
+        /* COMPACT MOBILE OVERRIDE */
+        @media screen and (max-width: 600px) {
+            .mission-widget {
+                width: 95%;
+                /* Wider on mobile */
+                top: 70px;
+            }
+        }
+
+        /* POPUP FOR COMPLETION (JUICY) */
+        .mission-complete-overlay {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: radial-gradient(circle, #FFD54F, #FF6F00);
+            padding: 2px;
+            border-radius: 12px;
+            z-index: 9000;
+            pointer-events: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .mission-complete-inner {
+            background: #212121;
+            border-radius: 10px;
+            padding: 20px 40px;
+            text-align: center;
+            color: white;
+            font-family: var(--font-heading);
+        }
+
+        .anim-mission-pop {
+            animation: popCheck 1.5s ease-out forwards;
+        }
+
+        @keyframes popCheck {
+            0% {
+                transform: translateX(-50%) scale(0) rotate(-10deg);
+                opacity: 0;
+            }
+
+            20% {
+                transform: translateX(-50%) scale(1.2) rotate(5deg);
+                opacity: 1;
+            }
+
+            40% {
+                transform: translateX(-50%) scale(1.0) rotate(0deg);
+            }
+
+            80% {
+                transform: translateX(-50%) scale(1.0) translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1.0) translateY(-50px);
+                opacity: 0;
+            }
         }
 
 
@@ -3309,7 +3635,7 @@
                     <div class="icon-supercash"></div><span id="txt-supercash" style="color: #69F0AE;">0</span>
                 </div>
             </div>
-            <div class="btn-settings btn-settings-top" onclick="game.openSettings()">⚙️</div>
+
         </div>
         <div class="hud-bottom">
             <div class="btn-toggle-menu" onclick="game.toggleMenu()">×</div>
@@ -3319,10 +3645,10 @@
             <div class="nav-btn" onclick="game.showMap()">
                 <div style="font-size:30px;">🗺️</div> <span class="nav-text">MAP</span>
             </div>
-            <div class="nav-btn" onclick="game.openResearch()">
+            <div class="nav-btn" onclick="game.openResearch()" id="btn-research-nav">
                 <div style="font-size:30px;">🧪</div> <span class="nav-text">RESEARCH</span>
             </div>
-            <div class="nav-btn" onclick="game.openShop()">
+            <div class="nav-btn" onclick="game.openShop()" id="btn-shop-nav">
                 <div style="font-size:30px;">🛒</div> <span class="nav-text">SHOP</span>
             </div>
             <div class="nav-btn" onclick="game.openSettings()" id="settings-mobile-btn">
@@ -3733,8 +4059,222 @@
         </div>
     </div>
 
+    <style>
+        /* --- TUTORIAL --- */
+        .tutorial-pointer {
+            position: fixed;
+            font-size: 4rem;
+            z-index: 10000;
+            pointer-events: none;
+            animation: pointer-bounce 1s infinite ease-in-out;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+            transition: all 0.3s;
+        }
+
+        @keyframes pointer-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        #orientation-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #263238;
+            z-index: 20000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #FFC107;
+        }
+
+        /* Show only on portrait mobile */
+        @media screen and (orientation: portrait) {
+            #orientation-warning {
+                display: flex;
+            }
+        }
+
+        /* Ensure UI Layer passes clicks */
+        #ui-layer {
+            pointer-events: none;
+        }
+
+        #ui-layer>* {
+            pointer-events: auto;
+        }
+
+        .btn-skip-tutorial {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 10000;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-skip-tutorial:hover {
+            transform: scale(1.05);
+            background: rgba(255, 50, 50, 0.8);
+        }
+
+        /* TUTORIAL POINTER (Missing in previous step) */
+        .tutorial-pointer {
+            position: fixed;
+            z-index: 10000;
+            font-size: 3rem;
+            pointer-events: none;
+            animation: bouncePointer 1s infinite;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+            /* Ensure it is visible on top of everything */
+            color: white;
+            text-shadow: 0 0 5px black;
+        }
+
+        @keyframes bouncePointer {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* NEW TUTORIAL STYLES */
+        .tutorial-welcome {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 11000;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            text-align: center;
+            animation: fadeInOut 2s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            20% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            80% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+        }
+
+        .tutorial-overlay-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            max-width: 400px;
+            transform: translate(-50%, -50%);
+            background: #263238;
+            border: 4px solid #FFD54F;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            z-index: 11000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .tutorial-overlay-text h3 {
+            margin-top: 0;
+            color: #FFD54F;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .tutorial-close-btn {
+            background: #F44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .mission-widget.hidden {
+            display: none !important;
+        }
+
+        /* Pulse Animation for Upgrade Button */
+        .btn-pulse {
+            animation: btn-pulse-anim 1s infinite;
+            border: 2px solid #00E676 !important;
+        }
+
+        @keyframes btn-pulse-anim {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(0, 230, 118, 0.4);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 15px rgba(0, 230, 118, 0.8);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(0, 230, 118, 0.4);
+            }
+        }
+
+        /* Mobile Optimization for Popup */
+        @media (max-height: 500px) {
+            .tutorial-overlay-text {
+                top: 20%;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
     <script>
-        // ... (SVG Assets Same) ...
+        // --- ASSETS ---
         function getHelicopterSVG() {
             return `<svg width="140" height="70" viewBox="0 0 140 70" style="overflow:visible;">
                 <defs>
@@ -4149,6 +4689,7 @@
                 this.el.classList.add('manager-active-glow');
                 this.updateUI();
                 if (this.stateChangeCb) this.stateChangeCb('ACTIVE');
+                if (game && game.missions) game.missions.onEvent('MANAGER_ACTIVATE');
                 game.createFloatText("ACTIVATE!", this.el.getBoundingClientRect().left - 100, this.el.getBoundingClientRect().top); // Rough check
             }
             updateUI() {
@@ -4530,7 +5071,11 @@
                 // Multipliers (Prestige + Boost)
                 let boost = 1;
                 try {
-                    if (typeof game !== 'undefined' && game.boosts && game.boosts.earnings) boost = 2;
+                    if (typeof game !== 'undefined' && game.boosts) {
+                        // Incremental Boost: 1 + (Level * 0.1)
+                        // Level 0 = 1x, Level 10 = 2x
+                        boost = 1 + (game.boosts.earnings * 0.1);
+                    }
                 } catch (e) { } // Handle TDZ for 'game' during init
 
                 let totalMult = this.globalMult * boost;
@@ -4930,7 +5475,7 @@
                             if (t.load > 0) {
                                 const researchMult = (this.research) ? this.research.multipliers.globalEarnings : 1;
                                 const income = t.load * researchMult;
-                                game.money += income;
+                                game.addMoney(income);
                                 // JUICINESS: Spawn Flying Coins
                                 game.spawnFlyingMoney(t.x + 30, 200, Math.min(5, Math.ceil(t.load / 10))); // Spawn up to 5 coins visual
                                 game.createFloatText(income, 1210, 160);
@@ -5375,6 +5920,331 @@
         }
 
 
+
+
+
+
+        /* --- MISSION SYSTEM LOGIC --- */
+        class Mission {
+            constructor(id, type, target, reward) {
+                this.id = id;
+                this.type = type;
+                // types: 'SHAFT_LEVEL', 'EARN_CASH', 'BUY_MANAGER', 'ACTIVATE_MANAGER', 'HIRE_MINER'
+                this.target = target;
+                // target formats:
+                // SHAFT_LEVEL: { id: 0, val: 50 }
+                // EARN_CASH: { val: 1000 }  (Accumulated during mission)
+                // BUY_MANAGER: { val: 1 } (Buy 1 more)
+                // ACTIVATE_MANAGER: { val: 5 } (Activate skills 5 times)
+
+                this.reward = reward; // { type: 'SC', val: 5 } or { type: 'CASH', val: 100 }
+                this.progress = 0;
+                this.goal = (typeof target.val === 'number') ? target.val : 0;
+                this.completed = false;
+                this.claimed = false;
+                this.desc = this.generateDescription();
+                this.icon = this.getIcon();
+            }
+
+            generateDescription() {
+                switch (this.type) {
+                    case 'SHAFT_LEVEL': return `Reach Shaft ${this.target.id + 1} Level ${this.target.val}`;
+                    case 'EARN_CASH': return `Earn $${fmt(this.target.val)} Cash`;
+                    case 'BUY_MANAGER': return `Hire ${this.target.val} New Managers`;
+                    case 'ACTIVATE_MANAGER': return `Activate Managers ${this.target.val} Times`;
+                    case 'HIRE_MINER': return `Hire workers in Shaft ${this.target.id + 1}`;
+                    default: return 'Unknown Mission';
+                }
+            }
+
+            getIcon() {
+                switch (this.type) {
+                    case 'SHAFT_LEVEL': return '⛏️';
+                    case 'EARN_CASH': return '💰';
+                    case 'BUY_MANAGER': return '👔';
+                    case 'ACTIVATE_MANAGER': return '⚡';
+                    case 'HIRE_MINER': return '👷';
+                    default: return '❓';
+                }
+            }
+
+            check(game) {
+                if (this.completed) return;
+
+                if (this.type === 'SHAFT_LEVEL') {
+                    if (game.shafts[this.target.id] && game.shafts[this.target.id].level >= this.target.val) {
+                        this.complete();
+                    }
+                    this.progress = (game.shafts[this.target.id]) ? game.shafts[this.target.id].level : 0;
+                }
+                else if (this.type === 'EARN_CASH') {
+                    if (game.money >= this.target.val) {
+                        this.complete(); // Still auto-complete if (somehow) current balance meets it
+                    }
+                    // Progress is now handled by increment() via onMoneyEarned
+                }
+                else if (this.type === 'ACTIVATE_MANAGER' || this.type === 'BUY_MANAGER') {
+                    // event based
+                    if (this.progress >= this.target.val) this.complete();
+                }
+            }
+
+            increment(amount = 1) {
+                if (this.completed) return;
+                this.progress += amount;
+                if (this.progress >= this.target.val) this.complete();
+            }
+
+            complete() {
+                this.completed = true;
+                this.progress = this.goal; // Cap visual
+            }
+        }
+
+        class MissionController {
+            constructor(game) {
+                this.game = game;
+                this.missions = []; // 3 slots
+                this.maxMissions = 3;
+                this.widget = null;
+                this.listContainer = null;
+                this.compactHeader = null;
+                this.isExpanded = false;
+
+                // Create UI
+                this.createUI();
+
+                this.lastUIUpdate = 0; // Throttle timestamp
+
+                // Init Missions (if empty)
+                this.fillMissions();
+            }
+
+            onMoneyEarned(amount) {
+                let changed = false;
+                this.missions.forEach(m => {
+                    if (!m.completed && !m.claimed && m.type === 'EARN_CASH') {
+                        m.increment(amount);
+                        changed = true;
+                    }
+                });
+                if (changed) this.updateUI(); // Reflect changes immediately
+            }
+
+            createUI() {
+                // Widget Container
+                this.widget = document.createElement('div');
+                this.widget.className = 'mission-widget';
+
+                // Compact Header (Serves as Toggle)
+                this.compactHeader = document.createElement('div');
+                this.compactHeader.className = 'mission-header-compact';
+                this.compactHeader.innerHTML = `
+                    <div class="mission-icon-main">🎯</div>
+                    <div class="mission-info-compact">
+                        <div class="mission-title-compact">Loading...</div>
+                        <div class="mission-progress-bg"><div class="mission-progress-fill"></div></div>
+                    </div>
+                    <div class="mission-toggle-btn">▼</div>
+                `;
+                this.compactHeader.onclick = (e) => {
+                    e.stopPropagation();
+                    this.toggleExpand();
+                };
+                this.widget.onclick = () => {
+                    // Mobile: Tap wrapper to expand if collapsed
+                    if (window.innerWidth <= 768 && !this.isExpanded) {
+                        this.toggleExpand();
+                    }
+                };
+
+                this.widget.appendChild(this.compactHeader);
+
+                // Expanded List
+                this.listContainer = document.createElement('div');
+                this.listContainer.className = 'mission-list-container';
+                this.widget.appendChild(this.listContainer);
+
+                document.body.appendChild(this.widget);
+            }
+
+            toggleExpand() {
+                this.isExpanded = !this.isExpanded;
+                if (this.isExpanded) {
+                    this.widget.classList.add('expanded');
+                    this.renderList();
+                } else {
+                    this.widget.classList.remove('expanded');
+                }
+            }
+
+            fillMissions() {
+                while (this.missions.length < this.maxMissions) {
+                    this.missions.push(this.generateMission());
+                }
+                this.updateUI(true); // Initial Render (Forced)
+            }
+
+            generateMission() {
+                const types = ['SHAFT_LEVEL', 'EARN_CASH', 'ACTIVATE_MANAGER']; // BUY_MANAGER removed for simplicity for now
+                const type = types[Math.floor(Math.random() * types.length)];
+                let target = {};
+                let reward = { type: 'SC', val: 2 + Math.floor(Math.random() * 5) }; // 2-6 SC
+
+                // Difficulty scaling based on current progress
+                // We need safe checks if game is initialized
+                const deepestShaftId = this.game.shafts.length - 1;
+                const lastShaft = this.game.shafts[deepestShaftId];
+
+                if (type === 'SHAFT_LEVEL') {
+                    // Pick a random unlocked shaft
+                    const sId = Math.floor(Math.random() * this.game.shafts.length);
+                    const currentLvl = this.game.shafts[sId].level;
+                    // Goal is current + 10 to 50
+                    const add = 10 + Math.floor(Math.random() * 40);
+                    target = { id: sId, val: currentLvl + add };
+                    reward.val = 5 + Math.floor(add / 5);
+                }
+                else if (type === 'EARN_CASH') {
+                    // 10x to 100x current money OR generation rate * 300s
+                    let current = this.game.money;
+                    if (current < 100) current = 100;
+                    target = { val: current * (5 + Math.random() * 10) };
+                    reward.val = 5;
+                }
+                else if (type === 'ACTIVATE_MANAGER') {
+                    target = { val: 3 + Math.floor(Math.random() * 5) }; // 3 to 8 times
+                }
+
+                return new Mission(Date.now() + Math.random(), type, target, reward);
+            }
+
+            onEvent(evt, data) {
+                // Hook for event-based missions
+                let changes = false;
+                this.missions.forEach(m => {
+                    if (!m.completed && !m.claimed) {
+                        if (m.type === 'ACTIVATE_MANAGER' && evt === 'MANAGER_ACTIVATE') {
+                            m.increment(1);
+                            changes = true;
+                        }
+                    }
+                });
+                if (changes) this.updateUI();
+            }
+
+            checkProgress() {
+                // Polling for state-based missions
+                let changes = false;
+                this.missions.forEach(m => {
+                    if (!m.completed && !m.claimed) {
+                        let oldProg = m.progress;
+                        m.check(this.game);
+                        if (m.completed || m.progress !== oldProg) changes = true;
+                    }
+                });
+                if (changes || this.isExpanded) this.updateUI();
+            }
+
+            claim(missionId) {
+                const mIndex = this.missions.findIndex(m => m.id === missionId);
+                if (mIndex === -1) return;
+
+                const m = this.missions[mIndex];
+                if (!m.completed) return;
+
+                // Grant ID
+                if (m.reward.type === 'SC') {
+                    this.game.superCash += m.reward.val;
+                    this.game.createFloatText(`+${m.reward.val} SC`, window.innerWidth / 2, window.innerHeight / 2, '#00E676');
+                } else {
+                    this.game.addMoney(m.reward.val);
+                    this.game.createFloatText(`+$${fmt(m.reward.val)}`, window.innerWidth / 2, window.innerHeight / 2, '#FFD54F');
+                }
+
+                // Show Fancy Popup
+                this.showCompletionEffect(m);
+
+                // Remove and Replace
+                this.missions.splice(mIndex, 1);
+                this.fillMissions();
+                this.updateUI(true);
+
+                // Save Game triggers?
+                this.game.saveGame();
+            }
+
+            showCompletionEffect(m) {
+                // JUICY pop effect
+                const overlay = document.createElement('div');
+                overlay.className = 'mission-complete-overlay anim-mission-pop';
+                overlay.innerHTML = `
+                    <div class="mission-complete-inner">
+                        <div style="font-size:30px; margin-bottom:10px;">${m.getIcon()}</div>
+                        <div style="font-size:18px; color:#FFD54F;">MISSION COMPLETE!</div>
+                        <div style="font-size:14px; margin-top:5px; opacity:0.8;">${m.desc}</div>
+                        <div style="font-size:24px; color:#00E676; margin-top:10px; font-weight:bold;">+${m.reward.val} SC</div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                setTimeout(() => overlay.remove(), 2000);
+                this.game.audio.playSFX('upgrade'); // Reuse upgrade sound for now
+            }
+
+            updateUI(force = false) {
+                const now = Date.now();
+                if (!force && (now - this.lastUIUpdate < 200)) return; // Throttle to 5fps
+                this.lastUIUpdate = now;
+                // Update Compact Header (Show first uncompleted or most progressed?)
+                // Strategy: Show the "closest" mission
+                const active = this.missions.filter(m => !m.completed);
+                const first = active[0] || this.missions[0]; // Fallback
+
+                if (first) {
+                    const pct = Math.min(100, (first.progress / first.goal) * 100);
+                    this.compactHeader.querySelector('.mission-title-compact').innerText = first.desc;
+                    this.compactHeader.querySelector('.mission-progress-fill').style.width = `${pct}%`;
+                    this.compactHeader.querySelector('.mission-icon-main').innerText = first.getIcon();
+                }
+
+                // Update List if Expanded
+                if (this.isExpanded) {
+                    this.listContainer.innerHTML = '';
+                    this.missions.forEach(m => {
+                        const item = document.createElement('div');
+                        item.className = 'mission-item ' + (m.completed ? 'completed' : '');
+
+                        const pct = Math.min(100, (m.progress / m.goal) * 100);
+
+                        let actionBtn = '';
+                        if (m.completed) {
+                            actionBtn = `<button class="btn-claim-mission">CLAIM</button>`;
+                        } else {
+                            actionBtn = `<div class="mission-status-text">${Math.floor(pct)}%</div>`;
+                        }
+
+                        item.innerHTML = `
+                            <div class="mission-item-header">
+                                <div class="mission-name">${m.icon} ${m.desc}</div>
+                                <div class="mission-reward">${m.reward.type === 'SC' ? '💎' : '$'} ${m.reward.val}</div>
+                            </div>
+                            ${!m.completed ?
+                                `<div class="mission-progress-bg" style="margin-top:5px; background:rgba(0,0,0,0.3); height:4px;">
+                                    <div class="mission-progress-fill" style="width:${pct}%"></div>
+                                </div>` : ''}
+                            ${actionBtn}
+                        `;
+
+                        if (m.completed) {
+                            item.querySelector('button').onclick = () => this.claim(m.id);
+                        }
+
+                        this.listContainer.appendChild(item);
+                    });
+                }
+            }
+        }
+
         /* --- MONSTER INVASION SYSTEM --- */
         class MonsterManager {
             constructor(gameInstance) {
@@ -5769,7 +6639,7 @@
 
                 const total = refund + bonus;
                 if (total > 0) {
-                    this.manager.game.money += total;
+                    this.manager.game.addMoney(total);
 
                     // Show RECOVERY POPUP
                     const popup = document.createElement('div');
@@ -6012,7 +6882,7 @@
                 });
 
                 const reward = Math.floor(Math.max(100, totalPPS * 120));
-                this.game.money += reward;
+                this.game.addMoney(reward);
 
                 this.game.createFloatText(`+$${fmt(reward)}`, this.x + 60, this.y, 'bonus-text');
                 this.game.audio.playSFX('coin'); // Use coin SFX instead of helicopter SFX on claim
@@ -6036,6 +6906,221 @@
 
 
 
+
+        /* --- TUTORIAL MANAGER --- */
+        class TutorialManager {
+            constructor(game) {
+                this.game = game;
+                this.active = false;
+                this.step = 0;
+                this.pointer = null;
+                this.skipBtn = null;
+                this.targetEl = null;
+            }
+
+            start() {
+                console.log("Starting Tutorial");
+                this.active = true;
+                this.createUI();
+                this.showWelcome();
+            }
+
+            createUI() {
+                this.pointer = document.createElement('div');
+                this.pointer.className = 'tutorial-pointer';
+                this.pointer.innerHTML = '👇';
+                this.pointer.style.display = 'none';
+                document.body.appendChild(this.pointer);
+
+                this.skipBtn = document.createElement('button');
+                this.skipBtn.className = 'btn-skip-tutorial';
+                this.skipBtn.innerText = 'SKIP TUTORIAL';
+                this.skipBtn.onclick = () => this.skip();
+                document.body.appendChild(this.skipBtn);
+            }
+
+            showWelcome() {
+                const w = document.createElement('div');
+                w.className = 'tutorial-welcome';
+                w.innerHTML = "Welcome to<br>DeepShafts";
+                document.body.appendChild(w);
+                setTimeout(() => {
+                    w.remove();
+                    this.step = 1;
+                    this.updateStep();
+                }, 2000);
+            }
+
+            showOverlay(title, text) {
+                const o = document.createElement('div');
+                o.className = 'tutorial-overlay-text';
+                o.innerHTML = `<h3>${title}</h3><p>${text}</p><button class="tutorial-close-btn">GOT IT</button>`;
+                document.body.appendChild(o);
+
+                // Pause specific game interactions if needed? No, keep it fluid.
+
+                return new Promise(resolve => {
+                    o.querySelector('button').onclick = () => {
+                        o.remove();
+                        resolve();
+                    };
+                });
+            }
+
+            update(dt) {
+                if (!this.active) return;
+
+                // Sync Pointer Position
+                if (this.pointer && this.targetEl && this.targetEl.isConnected && this.targetEl.offsetParent !== null) {
+                    const rect = this.targetEl.getBoundingClientRect();
+                    if (rect.width > 0 && rect.height > 0) {
+                        this.pointer.style.left = (rect.left + rect.width / 2 - 25) + 'px';
+                        this.pointer.style.top = (rect.top - 80) + 'px';
+                        this.pointer.style.display = 'block';
+                    } else {
+                        this.pointer.style.display = 'none';
+                    }
+                } else if (this.pointer) {
+                    this.pointer.style.display = 'none';
+                }
+
+                // Step Logic
+                if (this.step === 1) { // Buy Shaft
+                    if (this.game.shafts.length > 0) {
+                        this.step = 2;
+                        this.updateStep();
+                    }
+                } else if (this.step === 2) { // Upgrade Shaft 1 to Level 2
+                    const shaft = this.game.shafts[0];
+                    if (shaft) {
+                        // User feedback: POINT DIRECTLY TO UPGRADE BUTTON. No miner follow.
+                        this.targetEl = document.getElementById('btn-shaft-0'); // Using ID logic from Game.updateButtons
+                        if (!this.targetEl) this.targetEl = shaft.btn; // Fallback
+
+                        if (this.targetEl) this.targetEl.classList.add('btn-pulse');
+
+                        if (shaft.level >= 2) {
+                            if (this.targetEl) this.targetEl.classList.remove('btn-pulse');
+                            this.step = 3;
+                            this.updateStep();
+                        }
+                    }
+                } else if (this.step === 3) { // Hire Manager
+                    // Check if manager is HIRED
+                    const shaft = this.game.shafts[0];
+                    if (shaft && shaft.manager) {
+                        this.step = 3.5; // New Step: Activate Manager
+                        this.updateStep();
+                    }
+                } else if (this.step === 3.5) { // Activate Manager
+                    const shaft = this.game.shafts[0];
+                    // Check if manager is ACTIVE (state 'ACTIVE')
+                    if (shaft && shaft.manager && shaft.manager.state === 'ACTIVE') {
+                        this.step = 4;
+                        this.updateStep();
+                    }
+                }
+                // Steps 4, 5 handled by UI events
+                else if (this.step === 4) { // Open Research
+                    const overlay = document.getElementById('research-overlay');
+                    if (overlay && overlay.style.display === 'flex') {
+                        this.step = 4.5;
+                        this.updateStep();
+                    }
+                } else if (this.step === 5) { // Open Shop
+                    const overlay = document.getElementById('modal-overlay');
+                    if (overlay && overlay.style.display === 'flex') {
+                        this.step = 5.5;
+                        this.updateStep();
+                    }
+                }
+            }
+
+            async updateStep() {
+                this.targetEl = null;
+
+                if (this.step === 1) {
+                    this.targetEl = document.querySelector('.next-shaft-btn-container button');
+                } else if (this.step === 2) {
+                    // Logic handled in update() to ensure button reference
+                } else if (this.step === 3) {
+                    // Hire Manager - Shaft 1
+                    this.targetEl = document.querySelector('.pos-shaft-manager');
+                    if (this.pointer) this.pointer.innerText = '👇'; // Reset if needed
+                } else if (this.step === 3.5) {
+                    // Activate Manager
+                    this.targetEl = document.querySelector('.pos-shaft-manager.filled');
+                    // Maybe update text?
+                    // if (this.pointer) this.pointer.innerText = '⚡'; // Lightning bolt for activate
+                    // Or just keep hand. Hand is fine.
+                } else if (this.step === 4) {
+                    // Open Research
+                    if (this.pointer) this.pointer.innerText = '👇';
+                    this.targetEl = document.getElementById('btn-research-nav');
+                } else if (this.step === 4.5) {
+                    // Inside Research
+                    if (this.pointer) this.pointer.style.display = 'none';
+                    await this.showOverlay("RESEARCH LAB", "Unlock powerful upgrades here to boost your mining efficiency! (Click 'GOT IT' to close)");
+                    this.game.closeResearch();
+                    this.step = 5;
+                    this.updateStep();
+                } else if (this.step === 5) {
+                    // Open Shop
+                    this.targetEl = document.getElementById('btn-shop-nav');
+                } else if (this.step === 5.5) {
+                    // Inside Shop
+                    if (this.pointer) this.pointer.style.display = 'none';
+                    await this.showOverlay("SHOP", "Buy Time Warps and permanent boosts here! (Mobile optimized).");
+                    this.game.closeModal();
+                    this.step = 6;
+                    this.updateStep();
+                } else if (this.step === 6) {
+                    // New Step: Missions (User requested explanation)
+                    // Unlock Missions First
+                    const mw = document.querySelector('.mission-widget');
+                    if (mw) mw.classList.remove('hidden');
+
+                    this.targetEl = mw; // Point to mission widget
+                    this.step = 7;
+                    // Introduce a small delay or just wait for next update?
+                    // We want to show overlay immediately after pointing?
+                    // Let's point for a second then show overlay?
+                    // Or just show overlay immediately.
+
+                    await this.showOverlay("MISSIONS", "Complete missions here to earn Super Cash and rewards! Check back often.");
+                    this.complete();
+                }
+            }
+
+            skip() {
+                this.active = false;
+                if (this.pointer) this.pointer.remove();
+                if (this.skipBtn) this.skipBtn.remove();
+
+                // Ensure playable state
+                if (this.game.shafts.length === 0) this.game.buyShaft();
+
+                // Unlock Missions
+                const mw = document.querySelector('.mission-widget');
+                if (mw) mw.classList.remove('hidden');
+            }
+
+            complete() {
+                if (!this.active) return;
+                this.active = false;
+                if (this.pointer) this.pointer.remove();
+                if (this.skipBtn) this.skipBtn.remove();
+
+                // Show completion message
+                this.game.createFloatText("GOOD LUCK!", window.innerWidth / 2, window.innerHeight / 2, 'bonus-text');
+                this.game.audio.playSFX('upgrade');
+
+                // Unlock Missions
+                // const mw = document.querySelector('.mission-widget'); // Removed as it's handled in step 6 now
+                // if (mw) mw.classList.remove('hidden');
+            }
+        }
+
         class Game {
             constructor() {
                 this.audio = new AudioSystem();
@@ -6049,7 +7134,7 @@
                 this.prestigeMult = 1;
                 this.elevator = new Elevator(); this.warehouse = new Warehouse();
                 this.lastTime = 0; this.loop = this.loop.bind(this);
-                this.boosts = { speed: false, earnings: false }; // Init False
+                this.boosts = { speed: 0, earnings: 0 }; // Init Levels (0-10)
                 this.soundEnabled = true;
 
                 this.lastSaveTime = Date.now();
@@ -6058,10 +7143,24 @@
                 this.research = new ResearchTree(); // Research Tree Init
                 this.weather = new WeatherManager(this); // Weather Init
 
+                this.tutorial = new TutorialManager(this); // Init Tutorial
+
                 this.loadGame();
-                if (this.shafts.length === 0) this.buyShaft();
+                // Onboarding Logic: If no shafts (new game), Start Tutorial
+                if (this.shafts.length === 0) {
+                    this.tutorial.start();
+                    this.money = 2000;
+                    // Hide Missions initially
+                    setTimeout(() => {
+                        const mw = document.querySelector('.mission-widget');
+                        if (mw) mw.classList.add('hidden');
+                    }, 100);
+                }
+
                 this.initClouds();
                 this.initEnvironment(); // Birds & Fossils
+
+                this.missions = new MissionController(this);
 
                 requestAnimationFrame(this.loop);
                 this.activeUpgradeTarget = null; this.activeUpgradeId = null;
@@ -6076,6 +7175,12 @@
 
                 window.addEventListener('resize', () => this.handleResize());
                 this.handleResize();
+            }
+
+            addMoney(amount) {
+                if (typeof amount !== 'number' || isNaN(amount)) return;
+                this.money += amount;
+                if (amount > 0 && this.missions) this.missions.onMoneyEarned(amount);
             }
 
             handleResize() {
@@ -6173,7 +7278,12 @@
                         this.money = (data.money !== undefined && !isNaN(data.money)) ? data.money : 100;
                         this.superCash = data.superCash || 0;
                         this.worldId = data.worldId || 0;
-                        this.boosts = data.boosts || { speed: false, earnings: false }; // LOAD BOOSTS
+                        this.boosts = data.boosts || { speed: 0, earnings: 0 };
+                        // MIGRATION: Convert old booleans to levels
+                        if (this.boosts.speed === true) this.boosts.speed = 10;
+                        if (this.boosts.speed === false) this.boosts.speed = 0;
+                        if (this.boosts.earnings === true) this.boosts.earnings = 10;
+                        if (this.boosts.earnings === false) this.boosts.earnings = 0;
                         if (data.research) this.research.loadState(data.research); // LOAD RESEARCH
                         this.prestigeMult = data.prestigeMult || 1;
 
@@ -6755,15 +7865,17 @@
                     $('#popup-title').innerText = '🛒 Shop';
                     $('#popup-stats').innerHTML = `
                         <div class="shop-grid">
-                            <div class="shop-item ${this.boosts.speed > 0 ? 'boost-active' : ''}" onclick="game.buyBoost('speed')">
+                            <div class="shop-item" onclick="game.buyBoost('speed')">
                                 <div class="shop-item-icon">⚡</div>
-                                <div class="shop-item-name">2x Speed</div>
-                                <div class="shop-item-price">💎 10</div>
+                                <div class="shop-item-name">Speed (+10%)</div>
+                                <div style="font-size:0.8rem; color:#B0BEC5; margin-bottom:5px;">Lvl ${this.boosts.speed}/10 (${(1 + this.boosts.speed * 0.1).toFixed(1)}x)</div>
+                                <div class="shop-item-price" style="${this.boosts.speed >= 10 ? 'color:#FFD54F' : ''}">${this.boosts.speed >= 10 ? 'MAX' : '💎 10'}</div>
                             </div>
-                            <div class="shop-item ${this.boosts.earnings > 0 ? 'boost-active' : ''}" onclick="game.buyBoost('earnings')">
+                            <div class="shop-item" onclick="game.buyBoost('earnings')">
                                 <div class="shop-item-icon">💰</div>
-                                <div class="shop-item-name">2x Earnings</div>
-                                <div class="shop-item-price">💎 10</div>
+                                <div class="shop-item-name">Profit (+10%)</div>
+                                <div style="font-size:0.8rem; color:#B0BEC5; margin-bottom:5px;">Lvl ${this.boosts.earnings}/10 (${(1 + this.boosts.earnings * 0.1).toFixed(1)}x)</div>
+                                <div class="shop-item-price" style="${this.boosts.earnings >= 10 ? 'color:#FFD54F' : ''}">${this.boosts.earnings >= 10 ? 'MAX' : '💎 10'}</div>
                             </div>
                             <div class="shop-item" onclick="game.instantCollect()">
                                 <div class="shop-item-icon">🚀</div>
@@ -7001,14 +8113,15 @@
                 btn.ontouchend = (e) => { e.preventDefault(); this.stopAutoBuy(); };
             }
             buyBoost(type) {
+                if (this.boosts[type] >= 10) return; // Maxed
+
                 if (this.superCash >= 10) {
-                    if (this.boosts[type]) { alert('Already active!'); return; }
                     this.superCash -= 10;
-                    this.boosts[type] = true;
+                    this.boosts[type]++;
                     this.recalcAll(); // Apply new boost immediately
+                    this.audio.playSFX('upgrade');
                     this.renderModal();
                 } else {
-
                     alert('Not enough SuperCash! 💎');
                 }
             }
@@ -7185,10 +8298,16 @@
                 }
             }
 
-            createFloatText(amt, x, y) {
+            addMoney(amount) {
+                this.money += amount;
+                if (this.missions) this.missions.onMoneyEarned(amount);
+            }
+
+            createFloatText(amt, x, y, color) {
                 let el = document.createElement('div'); el.className = 'float-text';
                 el.innerText = typeof amt === 'string' ? amt : '+$' + fmt(amt);
                 el.style.left = x + 'px'; el.style.top = y + 'px';
+                if (color) el.style.color = color;
                 // Attach to wrapper so it scales with the world
                 document.querySelector('.game-content-wrapper').appendChild(el);
                 setTimeout(() => el.remove(), 1000);
@@ -7300,9 +8419,11 @@
                 if (this.monsterManager) this.monsterManager.update(dt);
                 if (this.helicopterManager) this.helicopterManager.update(dt);
                 if (this.weather) this.weather.update(dt); // Update Weather
+                if (this.missions) this.missions.checkProgress();
+                if (this.tutorial) this.tutorial.update(dt); // Tutorial Update
 
                 // Apply Boosts
-                let speedMult = this.boosts.speed ? 2 : 1;
+                let speedMult = 1 + (this.boosts.speed * 0.1);
                 // Removed decrement logic for permanent boosts
 
 
