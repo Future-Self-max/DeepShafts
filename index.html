@@ -4148,6 +4148,177 @@
                 opacity: 0;
             }
         }
+
+        /* STREAK UI */
+        #streak-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 20000;
+            display: none;
+            /* Default Hidden */
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .streak-panel {
+            background: linear-gradient(135deg, #263238, #1a0f0d);
+            border: 2px solid #FFD54F;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 213, 79, 0.3);
+            animation: popIn 0.4s ease-out;
+            position: relative;
+        }
+
+        .streak-header {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: #FFD54F;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .streak-grid {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .streak-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            width: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .streak-card.active {
+            opacity: 1;
+            background: linear-gradient(to bottom, rgba(255, 213, 79, 0.2), rgba(255, 111, 0, 0.2));
+            border-color: #FFD54F;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
+            z-index: 10;
+        }
+
+        .streak-card.claimed {
+            opacity: 0.8;
+            background: rgba(105, 240, 174, 0.1);
+            border-color: #69F0AE;
+        }
+
+        .streak-card.claimed::after {
+            content: '✓';
+            color: #69F0AE;
+            font-size: 20px;
+            font-weight: bold;
+            position: absolute;
+            top: 2px;
+            right: 5px;
+        }
+
+        .streak-day {
+            font-size: 0.8rem;
+            color: #B0BEC5;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .streak-icon {
+            font-size: 2rem;
+        }
+
+        .streak-val {
+            font-size: 0.7rem;
+            color: #FFF;
+        }
+
+        .btn-claim-streak {
+            background: linear-gradient(135deg, #FFD54F, #FF6F00);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-family: var(--font-heading);
+            color: #3E2723;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 160, 0, 0.6);
+            transition: transform 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-claim-streak:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        /* CLAIM ANIMATION EFFECTS */
+        .shake-effect {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFD54F;
+            z-index: 20005;
+            pointer-events: none;
+            animation: confetti-fall 1.5s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
@@ -4219,6 +4390,13 @@
                         <!-- Research Tree Nodes will be injected here -->
                     </div>
                 </div>
+            </div>
+        </div>
+        <div id="streak-overlay">
+            <div class="streak-panel">
+                <div class="streak-header">DAILY LOGIN REWARDS</div>
+                <div class="streak-grid" id="streak-grid"></div>
+                <button id="btn-claim-streak" class="btn-claim-streak">CLAIM REWARD</button>
             </div>
         </div>
     </div>
@@ -6123,15 +6301,15 @@
                     skyColor = this.theme.dayTop;
                 } else if (this.time < 21) { // Sunset
                     let t = (this.time - 18) / 3;
-                    opacity = t * 0.5; // Start darkening
+                    opacity = t * 0.5;
                     skyColor = this.lerpColor(this.theme.dayTop, "#FF6F00", t);
                 } else { // Night
                     let t = (this.time - 21) / 3;
-                    opacity = 0.5 + (t * 0.2); // 0.5 -> 0.7
+                    opacity = 0.5 + (t * 0.2);
                     skyColor = this.lerpColor("#FF6F00", "#0D47A1", t);
                 }
 
-                this.currentIntensity = opacity > 0.1 ? 1 : 0; // Cache for lights
+                this.currentIntensity = opacity > 0.1 ? 1 : 0;
                 this.overlay.style.opacity = opacity;
                 this.sky.style.background = `linear-gradient(to bottom, ${skyColor}, ${this.theme.dayBot})`;
             }
@@ -6392,8 +6570,11 @@
                     const baseVol = (id === 'mine') ? 0.3 : 0.6; // Lower volume for frequent mining
                     clone.volume = baseVol * this.sfxVolume * this.duckingMultiplier; // Apply SFX volume multiplier and ducking
                     if (id === 'error') clone.volume = 0.8 * this.sfxVolume * this.duckingMultiplier;
+
                     clone.play().catch(e => { });
                     return clone; // Return individual instance for control
+                } else {
+                    console.warn(`[SFX] Sound ID '${id}' not found!`);
                 }
             }
 
@@ -7684,6 +7865,541 @@
             }
         }
 
+        /* --- STREAK MANAGER --- */
+        class StreakManager {
+            constructor(game) {
+                this.game = game;
+                this.lastLoginTime = 0;
+                this.currentStreak = 1;
+                this.claimedToday = false;
+                this.firstLaunchTime = 0;
+                this.modalShown = false;
+            }
+
+            init() {
+                // If first launch time is 0, set it now
+                if (!this.firstLaunchTime) {
+                    this.firstLaunchTime = Date.now();
+                }
+
+                this.checkStreak();
+
+                // 2.5 Minutes Delay for First Time User (150,000 ms)
+                // Only if streak is 1 and not claimed
+                if (Date.now() - this.firstLaunchTime < 150000 && !this.claimedToday && this.currentStreak === 1) {
+                    const timeRemaining = 150000 - (Date.now() - this.firstLaunchTime);
+                    console.log("Streak Reward delayed by", timeRemaining, "ms");
+                    setTimeout(() => this.showUI(), timeRemaining);
+                } else if (!this.claimedToday) {
+                    // Returning user or after delay
+                    setTimeout(() => this.showUI(), 1000); // Small delay for effect
+                }
+            }
+
+            checkStreak() {
+                if (this.lastLoginTime === 0) return; // First run
+
+                const now = new Date();
+                const last = new Date(this.lastLoginTime);
+
+                // Compare Dates (Day level)
+                const isSameDay = (now.getDate() === last.getDate() &&
+                    now.getMonth() === last.getMonth() &&
+                    now.getFullYear() === last.getFullYear());
+
+                if (isSameDay) {
+                    // Do nothing
+                } else {
+                    const diffTime = Math.abs(now - last);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays <= 2) { // 1 day diff can be < 24h or > 24h depending on time, checking roughly next day
+                        // Logic: if last login was yesterday. 
+                        // "Yesterday" could be 23:59 vs "Today" 00:01 (2 mins diff)
+                        // Check strictly by calendar day difference
+                        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                        const startOfLast = new Date(last.getFullYear(), last.getMonth(), last.getDate()).getTime();
+                        const daysDiff = Math.abs(startOfToday - startOfLast) / (1000 * 60 * 60 * 24);
+
+                        if (daysDiff === 1) {
+                            if (this.claimedToday) {
+                                // Loop handling: If we claimed "yesterday", today is new day
+                                this.claimedToday = false;
+                                this.currentStreak++;
+                            }
+                        } else if (daysDiff > 1) {
+                            this.currentStreak = 1;
+                            this.claimedToday = false;
+                        }
+                    } else {
+                        this.currentStreak = 1;
+                        this.claimedToday = false;
+                    }
+                }
+
+                if (this.currentStreak > 7) this.currentStreak = 1;
+            }
+
+            getRewardValue() {
+                // Global PPS * 300 (5 mins) * StreakDay
+                const pps = this.game.getGlobalPPS();
+                const base = Math.max(10, pps); // Flashlight money basically if 0 pps
+                return Math.floor(base * 300 * this.currentStreak);
+            }
+
+            showUI() {
+                if (this.claimedToday || this.modalShown) return;
+                this.modalShown = true;
+
+                const overlay = document.getElementById('streak-overlay');
+                overlay.style.display = 'flex';
+                this.game.audio.playSFX('upgrade');
+
+                const grid = document.getElementById('streak-grid');
+                grid.innerHTML = '';
+
+                for (let i = 1; i <= 7; i++) {
+                    const card = document.createElement('div');
+                    card.className = `streak-card ${i < this.currentStreak ? 'claimed' : (i === this.currentStreak ? 'active' : '')}`;
+                    // Determine visual reward (approximate calculation for display logic only)
+                    // We can't show exact $ because PPS changes. 
+                    // Show "5m x Day"
+
+                    card.innerHTML = `
+                        <div class="streak-day">DAY ${i}</div>
+                        <div class="streak-icon">${i === 7 ? '🎁' : '💰'}</div>
+                        <div class="streak-val">${5 * i}m Idle</div>
+                    `;
+                    grid.appendChild(card);
+                }
+
+                const btn = document.getElementById('btn-claim-streak');
+                const reward = this.getRewardValue();
+                btn.innerHTML = `CLAIM <span style="color:#FFF">$${fmt(reward)}</span>`;
+
+                // Re-bind click to avoid multiples
+                btn.onclick = () => this.claim();
+            }
+
+            claim() {
+                if (this.claimedToday) return; // Prevent double clicks
+                this.claimedToday = true;
+
+                const reward = this.getRewardValue();
+                const btn = document.getElementById('btn-claim-streak');
+                const overlay = document.getElementById('streak-overlay');
+                const panel = overlay.querySelector('.streak-panel');
+
+                // 1. Visual Feedback on Button
+                btn.innerHTML = "CLAIMED!";
+                btn.style.background = "#69F0AE";
+                btn.style.color = "#1b5e20";
+                btn.style.transform = "scale(1.1)";
+
+                // 2. Shake Effect
+                panel.classList.add('shake-effect');
+                setTimeout(() => panel.classList.remove('shake-effect'), 500);
+
+                // 3. Audio & Particles
+                this.game.audio.playSFX('upgrade'); // Big sound
+
+                // Burst of coins/confetti
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        this.game.audio.playSFX('coin');
+                        this.createConfetti(btn);
+                    }, i * 50); // Cascade effect
+                }
+
+                // 4. Actual Reward
+                this.game.addMoney(reward);
+                this.game.createFloatText(`+$${fmt(reward)}`, window.innerWidth / 2, window.innerHeight / 2, 'bonus-text');
+
+                // Spawn flying money
+                if (this.game.spawnFlyingMoney) {
+                    this.game.spawnFlyingMoney(window.innerWidth / 2, window.innerHeight / 2, 20);
+                }
+
+                this.lastLoginTime = Date.now();
+                this.game.saveGame();
+
+                // 5. Show "Come Back Tomorrow" Preview
+                setTimeout(() => {
+                    this.showTomorrowPreview(panel, btn);
+                }, 1800);
+
+                // 6. Delayed Close for "Dopamine" - Extended to show tomorrow preview
+                setTimeout(() => {
+                    this.modalShown = false;
+                    overlay.style.display = 'none';
+                    // Reset Button Style for next time (though it will be rebuilt)
+                    btn.style.transform = "scale(1)";
+                    // Remove tomorrow preview if it exists
+                    const tomorrowPreview = document.querySelector('.tomorrow-preview');
+                    if (tomorrowPreview) tomorrowPreview.remove();
+                }, 5500);
+            }
+
+            showTomorrowPreview(panel, btn) {
+                const nextDay = (this.currentStreak % 7) + 1;
+                const isSpecialDay = nextDay === 7;
+
+                // Hide the claim button
+                btn.style.display = 'none';
+
+                // Create stunning tomorrow preview
+                const preview = document.createElement('div');
+                preview.className = 'tomorrow-preview';
+                preview.innerHTML = `
+                    <div class="tomorrow-stars">
+                        ${Array(12).fill().map((_, i) => `<div class="tomorrow-star" style="--i:${i}"></div>`).join('')}
+                    </div>
+                    <div class="tomorrow-glow"></div>
+                    <div class="tomorrow-content">
+                        <div class="tomorrow-title">
+                            <span class="tomorrow-emoji">🌙</span>
+                            COME BACK TOMORROW
+                            <span class="tomorrow-emoji">✨</span>
+                        </div>
+                        <div class="tomorrow-subtitle">for even greater rewards!</div>
+                        <div class="tomorrow-card ${isSpecialDay ? 'special' : ''}">
+                            <div class="tomorrow-card-glow"></div>
+                            <div class="tomorrow-card-sparkles">
+                                ${Array(8).fill().map(() => `<div class="sparkle"></div>`).join('')}
+                            </div>
+                            <div class="tomorrow-day">DAY ${nextDay}</div>
+                            <div class="tomorrow-icon">${isSpecialDay ? '🎁' : '💰'}</div>
+                            <div class="tomorrow-reward">${5 * nextDay}m Idle Cash</div>
+                            ${isSpecialDay ? '<div class="tomorrow-bonus">🌟 MEGA BONUS! 🌟</div>' : ''}
+                        </div>
+                        <div class="tomorrow-countdown">
+                            <div class="tomorrow-clock">⏰</div>
+                            <div class="tomorrow-countdown-text">See you soon!</div>
+                        </div>
+                    </div>
+                `;
+
+                // Inject CSS if not already present
+                if (!document.getElementById('tomorrow-preview-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'tomorrow-preview-styles';
+                    style.textContent = `
+                        .tomorrow-preview {
+                            position: absolute;
+                            inset: 0;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            background: radial-gradient(ellipse at center, rgba(25, 32, 72, 0.95) 0%, rgba(15, 20, 45, 0.98) 100%);
+                            border-radius: 16px;
+                            animation: tomorrowFadeIn 0.6s ease-out forwards;
+                            overflow: hidden;
+                            z-index: 100;
+                        }
+                        
+                        @keyframes tomorrowFadeIn {
+                            from { opacity: 0; transform: scale(0.8); }
+                            to { opacity: 1; transform: scale(1); }
+                        }
+                        
+                        .tomorrow-glow {
+                            position: absolute;
+                            width: 300px;
+                            height: 300px;
+                            background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%);
+                            animation: tomorrowPulse 2s ease-in-out infinite;
+                            pointer-events: none;
+                        }
+                        
+                        @keyframes tomorrowPulse {
+                            0%, 100% { transform: scale(1); opacity: 0.6; }
+                            50% { transform: scale(1.3); opacity: 1; }
+                        }
+                        
+                        .tomorrow-stars {
+                            position: absolute;
+                            inset: 0;
+                            pointer-events: none;
+                        }
+                        
+                        .tomorrow-star {
+                            position: absolute;
+                            width: 4px;
+                            height: 4px;
+                            background: white;
+                            border-radius: 50%;
+                            animation: twinkle 1.5s ease-in-out infinite;
+                            animation-delay: calc(var(--i) * 0.2s);
+                        }
+                        
+                        .tomorrow-star:nth-child(1) { top: 10%; left: 20%; }
+                        .tomorrow-star:nth-child(2) { top: 15%; right: 25%; }
+                        .tomorrow-star:nth-child(3) { top: 25%; left: 10%; }
+                        .tomorrow-star:nth-child(4) { top: 20%; right: 15%; }
+                        .tomorrow-star:nth-child(5) { bottom: 30%; left: 15%; }
+                        .tomorrow-star:nth-child(6) { bottom: 25%; right: 20%; }
+                        .tomorrow-star:nth-child(7) { top: 40%; left: 5%; }
+                        .tomorrow-star:nth-child(8) { top: 35%; right: 8%; }
+                        .tomorrow-star:nth-child(9) { bottom: 15%; left: 25%; }
+                        .tomorrow-star:nth-child(10) { bottom: 20%; right: 10%; }
+                        .tomorrow-star:nth-child(11) { top: 8%; left: 50%; }
+                        .tomorrow-star:nth-child(12) { bottom: 10%; left: 50%; }
+                        
+                        @keyframes twinkle {
+                            0%, 100% { opacity: 0.3; transform: scale(1); }
+                            50% { opacity: 1; transform: scale(1.5); }
+                        }
+                        
+                        .tomorrow-content {
+                            position: relative;
+                            z-index: 10;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 15px;
+                        }
+                        
+                        .tomorrow-title {
+                            font-family: 'Fredoka One', cursive;
+                            font-size: 1.6rem;
+                            color: #FFD54F;
+                            text-shadow: 0 0 20px rgba(255, 213, 79, 0.8), 0 2px 4px rgba(0,0,0,0.5);
+                            animation: titleGlow 2s ease-in-out infinite;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                        }
+                        
+                        @keyframes titleGlow {
+                            0%, 100% { text-shadow: 0 0 20px rgba(255, 213, 79, 0.8), 0 2px 4px rgba(0,0,0,0.5); }
+                            50% { text-shadow: 0 0 40px rgba(255, 213, 79, 1), 0 0 60px rgba(255, 213, 79, 0.5), 0 2px 4px rgba(0,0,0,0.5); }
+                        }
+                        
+                        .tomorrow-emoji {
+                            animation: emojiFloat 2s ease-in-out infinite;
+                        }
+                        
+                        .tomorrow-emoji:first-child { animation-delay: 0s; }
+                        .tomorrow-emoji:last-child { animation-delay: 0.5s; }
+                        
+                        @keyframes emojiFloat {
+                            0%, 100% { transform: translateY(0) rotate(-5deg); }
+                            50% { transform: translateY(-8px) rotate(5deg); }
+                        }
+                        
+                        .tomorrow-subtitle {
+                            font-size: 1rem;
+                            color: #B0BEC5;
+                            margin-bottom: 10px;
+                        }
+                        
+                        .tomorrow-card {
+                            position: relative;
+                            background: linear-gradient(145deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+                            border: 3px solid #7C4DFF;
+                            border-radius: 16px;
+                            padding: 20px 30px;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 8px;
+                            animation: cardFloat 3s ease-in-out infinite, cardShine 4s linear infinite;
+                            box-shadow: 0 0 30px rgba(124, 77, 255, 0.5), 0 10px 40px rgba(0,0,0,0.4);
+                            overflow: hidden;
+                        }
+                        
+                        .tomorrow-card.special {
+                            background: linear-gradient(145deg, #b71c1c 0%, #c62828 50%, #e53935 100%);
+                            border-color: #FFD54F;
+                            box-shadow: 0 0 40px rgba(255, 213, 79, 0.6), 0 10px 40px rgba(0,0,0,0.4);
+                        }
+                        
+                        @keyframes cardFloat {
+                            0%, 100% { transform: translateY(0) rotate(-1deg); }
+                            50% { transform: translateY(-10px) rotate(1deg); }
+                        }
+                        
+                        @keyframes cardShine {
+                            0% { background-position: -200% 0; }
+                            100% { background-position: 200% 0; }
+                        }
+                        
+                        .tomorrow-card-glow {
+                            position: absolute;
+                            inset: -50%;
+                            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.1), transparent);
+                            animation: rotateGlow 4s linear infinite;
+                        }
+                        
+                        @keyframes rotateGlow {
+                            from { transform: rotate(0deg); }
+                            to { transform: rotate(360deg); }
+                        }
+                        
+                        .tomorrow-card-sparkles {
+                            position: absolute;
+                            inset: 0;
+                            pointer-events: none;
+                        }
+                        
+                        .tomorrow-card-sparkles .sparkle {
+                            position: absolute;
+                            width: 6px;
+                            height: 6px;
+                            background: white;
+                            border-radius: 50%;
+                            animation: sparkleAnim 1.5s ease-in-out infinite;
+                        }
+                        
+                        .tomorrow-card-sparkles .sparkle:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+                        .tomorrow-card-sparkles .sparkle:nth-child(2) { top: 10%; right: 10%; animation-delay: 0.2s; }
+                        .tomorrow-card-sparkles .sparkle:nth-child(3) { bottom: 10%; left: 10%; animation-delay: 0.4s; }
+                        .tomorrow-card-sparkles .sparkle:nth-child(4) { bottom: 10%; right: 10%; animation-delay: 0.6s; }
+                        .tomorrow-card-sparkles .sparkle:nth-child(5) { top: 50%; left: 5%; animation-delay: 0.8s; }
+                        .tomorrow-card-sparkles .sparkle:nth-child(6) { top: 50%; right: 5%; animation-delay: 1s; }
+                        .tomorrow-card-sparkles .sparkle:nth-child(7) { top: 20%; left: 50%; animation-delay: 1.2s; }
+                        .tomorrow-card-sparkles .sparkle:nth-child(8) { bottom: 20%; left: 50%; animation-delay: 1.4s; }
+                        
+                        @keyframes sparkleAnim {
+                            0%, 100% { opacity: 0; transform: scale(0); }
+                            50% { opacity: 1; transform: scale(1); }
+                        }
+                        
+                        .tomorrow-day {
+                            font-family: 'Fredoka One', cursive;
+                            font-size: 0.9rem;
+                            color: rgba(255,255,255,0.9);
+                            letter-spacing: 2px;
+                            position: relative;
+                            z-index: 5;
+                        }
+                        
+                        .tomorrow-icon {
+                            font-size: 3rem;
+                            animation: iconBounce 1s ease-in-out infinite;
+                            position: relative;
+                            z-index: 5;
+                        }
+                        
+                        @keyframes iconBounce {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.15); }
+                        }
+                        
+                        .tomorrow-reward {
+                            font-family: 'Roboto', sans-serif;
+                            font-size: 1.1rem;
+                            font-weight: bold;
+                            color: #69F0AE;
+                            text-shadow: 0 0 10px rgba(105, 240, 174, 0.5);
+                            position: relative;
+                            z-index: 5;
+                        }
+                        
+                        .tomorrow-bonus {
+                            font-family: 'Fredoka One', cursive;
+                            font-size: 0.85rem;
+                            color: #FFD54F;
+                            animation: bonusPulse 0.8s ease-in-out infinite;
+                            position: relative;
+                            z-index: 5;
+                        }
+                        
+                        @keyframes bonusPulse {
+                            0%, 100% { transform: scale(1); opacity: 1; }
+                            50% { transform: scale(1.1); opacity: 0.8; }
+                        }
+                        
+                        .tomorrow-countdown {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            margin-top: 10px;
+                            padding: 10px 20px;
+                            background: rgba(255,255,255,0.1);
+                            border-radius: 20px;
+                            backdrop-filter: blur(5px);
+                        }
+                        
+                        .tomorrow-clock {
+                            font-size: 1.5rem;
+                            animation: clockTick 1s steps(2) infinite;
+                        }
+                        
+                        @keyframes clockTick {
+                            0% { transform: rotate(-5deg); }
+                            100% { transform: rotate(5deg); }
+                        }
+                        
+                        .tomorrow-countdown-text {
+                            font-size: 0.9rem;
+                            color: #E0E0E0;
+                            font-weight: bold;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                panel.appendChild(preview);
+                this.game.audio.playSFX('newWorld');
+            }
+
+            createConfetti(sourceEl) {
+                const rect = sourceEl.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+
+                // Random Color
+                const colors = ['#FFD54F', '#FF6F00', '#69F0AE', '#00E676', '#40C4FF', '#E040FB'];
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                confetti.style.left = x + 'px';
+                confetti.style.top = y + 'px';
+
+                // Random trajectory for "explosion"
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 5 + Math.random() * 10;
+                const tx = Math.cos(angle) * 200 * (Math.random() + 0.5);
+                const ty = (Math.sin(angle) * 200 * (Math.random() + 0.5)) - 100; // Prefer upwards
+
+                // We use custom property for the animation to use if we wanted complex physics, 
+                // but for simple CSS, we can just set a transform target or use JS animation.
+                // Let's use JS for the explosion trajectory, CSS for the fall/fade.
+
+                document.body.appendChild(confetti);
+
+                confetti.animate([
+                    { transform: `translate(0,0) scale(1)`, opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) scale(0.5) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                    fill: 'forwards'
+                }).onfinish = () => confetti.remove();
+            }
+
+            loadState(data) {
+                if (!data) return;
+                this.lastLoginTime = data.lastLoginTime || 0;
+                this.currentStreak = data.currentStreak || 1;
+                this.claimedToday = data.claimedToday || false;
+                this.firstLaunchTime = data.firstLaunchTime || Date.now();
+            }
+
+            getSaveData() {
+                return {
+                    lastLoginTime: this.lastLoginTime,
+                    currentStreak: this.currentStreak,
+                    claimedToday: this.claimedToday,
+                    firstLaunchTime: this.firstLaunchTime
+                };
+            }
+        }
+
         class Game {
             constructor() {
                 this.audio = new AudioSystem();
@@ -7710,6 +8426,7 @@
                 this.weather = new WeatherManager(this); // Weather Init
 
                 this.tutorial = new TutorialManager(this); // Init Tutorial
+                this.streakManager = new StreakManager(this); // Init StreakManager
 
                 this.loadGame();
                 // Onboarding Logic: If no shafts (new game), Start Tutorial
@@ -7943,7 +8660,8 @@
                         whMgr: this.warehouse.manager ? { type: this.warehouse.manager.type, state: this.warehouse.manager.state, timer: this.warehouse.manager.timer } : null,
                         boosts: this.boosts, // SAVE BOOSTS
                         research: { unlocked: this.research.unlocked }, // SAVE RESEARCH
-                        lastSave: this.lastSaveTime
+                        lastSave: this.lastSaveTime,
+                        streak: this.streakManager.getSaveData()
                     }));
                 } catch (e) { }
             }
@@ -7967,6 +8685,7 @@
                         this.totalMoneyEarned = data.totalMoneyEarned || 0;
                         this.coreFragments = data.coreFragments || 0;
                         this.relics = data.relics || [];
+                        if (data.streak) this.streakManager.loadState(data.streak);
 
                         this.applyWorldVisuals(this.worldId);
                         this.elevator.loadState(data.eleLvl || 1);
@@ -8024,6 +8743,7 @@
                 // SYNC COST DISPLAY ON LOAD
                 this.updateNextShaftCostText();
                 this.resizeWorld(); // Ensure world is big enough for loaded shafts
+                this.streakManager.init();
             }
             resizeWorld() {
                 // Calculate required height: Top Offset (250) + Max Shaft Depth * (Height+Gap) + Buffer
@@ -8220,6 +8940,13 @@
 
                 $('#popup-stats').innerHTML = html;
                 $('#popup-buy-btn').style.display = 'none';
+            }
+
+            getGlobalPPS() {
+                // Return Net Income (Min of all 3 sectors)
+                const stats = this.getCalculatedStats();
+                const net = Math.min(stats.minePerSec, stats.elePerSec, stats.whPerSec);
+                return isNaN(net) ? 0 : net;
             }
 
             getCalculatedStats() {
@@ -9350,6 +10077,17 @@
         window.addEventListener('resize', updateMobileScaling);
         window.addEventListener('DOMContentLoaded', updateMobileScaling);
         updateMobileScaling();
+
+
+        // --- GLOBAL CLICK SOUND ---
+        const globalClickSound = new Audio('audio/clicksound.mp3');
+        globalClickSound.volume = 0.3; // Subtle but audible
+
+        document.addEventListener('click', () => {
+            const sound = globalClickSound.cloneNode();
+            sound.volume = globalClickSound.volume;
+            sound.play().catch(e => console.warn("Audio play failed:", e));
+        });
 
     </script>
 
