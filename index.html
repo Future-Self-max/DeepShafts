@@ -7425,7 +7425,8 @@
                     eleArrival: new Audio('audio/Elevatorarrivalsound 2.mp3'),
                     cartMove: new Audio('audio/Warehousecartmove.mp3'),
                     unload: new Audio('audio/Unloading.mp3'),
-                    helicopter: new Audio('audio/helicopter.mp3')
+                    helicopter: new Audio('audio/helicopter.mp3'),
+                    click: new Audio('audio/clicksound.mp3')
                 };
 
                 this.sfx.eleMove.loop = true;
@@ -7482,8 +7483,16 @@
                 this.duckingMultiplier = isDucked ? 0.2 : 1.0;
                 // Update active loops immediately
                 if (this.sfxEnabled) {
-                    if (!this.sfx.eleMove.paused) this.sfx.eleMove.volume = (0.2) * this.sfxVolume * this.duckingMultiplier;
-                    if (!this.sfx.cartMove.paused) this.sfx.cartMove.volume = (0.2) * this.sfxVolume * this.duckingMultiplier;
+                    const loops = ['eleMove', 'cartMove', 'helicopter'];
+                    loops.forEach(id => {
+                        const src = this.sfx[id];
+                        if (src && !src.paused) {
+                            let baseVol = 0.5;
+                            if (id === 'eleMove' || id === 'cartMove') baseVol = 0.2;
+                            if (id === 'helicopter') baseVol = 0.25;
+                            src.volume = baseVol * this.sfxVolume * this.duckingMultiplier;
+                        }
+                    });
                 }
             }
 
@@ -8851,6 +8860,7 @@
                     const type = () => {
                         if (i < text.length) {
                             this.bubble.innerHTML += text.charAt(i);
+                            if (i % 2 === 0) this.game.audio.playSFX('click', 1.5); // Subtle typewriter sound
                             i++;
                             this.typewriterTimeout = setTimeout(type, 30);
                         } else {
@@ -9020,6 +9030,13 @@
                 this.active = false;
                 this.game.tutorialDone = true;
                 this.game.saveGame();
+
+                // SAFETY: Ensure audio is un-ducked
+                if (this.game.audio) {
+                    this.game.audio.duckSFX(false);
+                    this.game.audio.exitShop();
+                }
+
                 if (this.pointer) this.pointer.remove();
                 if (this.skipBtn) this.skipBtn.remove();
                 if (this.container) this.container.remove();
@@ -9033,6 +9050,10 @@
                 this.active = false;
                 this.game.tutorialDone = true;
                 this.game.saveGame();
+
+                // SAFETY: Ensure audio is un-ducked even if we skipped steps
+                if (this.game.audio) this.game.audio.duckSFX(false);
+
                 setTimeout(() => {
                     if (this.container) this.container.classList.remove('active');
                     if (this.pointer) this.pointer.remove();
@@ -10319,7 +10340,9 @@
             closeModal() {
                 $('#modal-overlay').style.display = 'none';
                 $('#popup-balance-msg').style.display = 'none';
-                if (this.modalMode === 'shop') {
+
+                // Robust un-ducking: check both mode and multiplier
+                if (this.modalMode === 'shop' || this.audio.duckingMultiplier < 1.0) {
                     this.audio.duckSFX(false);
                     this.audio.exitShop(); // Exit exclusive mode
                 }
@@ -11153,14 +11176,15 @@
         updateMobileScaling();
 
 
-        // --- GLOBAL CLICK SOUND ---
-        const globalClickSound = new Audio('audio/clicksound.mp3');
-        globalClickSound.volume = 0.3; // Subtle but audible
-
-        document.addEventListener('click', () => {
-            const sound = globalClickSound.cloneNode();
-            sound.volume = globalClickSound.volume;
-            sound.play().catch(e => console.warn("Audio play failed:", e));
+        // --- GLOBAL CLICK SOUND (Safe & Integrated) ---
+        document.addEventListener('click', (e) => {
+            // Only play if not clicking a specialized button that handles its own sound
+            if (e.target.closest('button') || e.target.closest('.nav-btn') || e.target.closest('.manager-slot')) {
+                // Let the specific handler deal with it if needed, or play a slight click regardless
+            }
+            if (game && game.audio) {
+                game.audio.playSFX('click');
+            }
         });
 
     </script>
