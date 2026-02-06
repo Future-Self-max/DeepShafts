@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>DeepShafts</title>
     <link rel="manifest" href="manifest.json">
 
@@ -371,7 +371,7 @@
 
             .popup-panel,
             .popup-panel * {
-                touch-action: pan-y !important;
+                touch-action: manipulation !important;
                 /* Allow scrolling and interaction */
             }
 
@@ -394,7 +394,7 @@
 
             #world-container,
             #world-container * {
-                touch-action: pan-y !important;
+                touch-action: manipulation !important;
             }
 
             #world-container {
@@ -1239,42 +1239,173 @@
         }
 
 
-        /* --- MISSION SYSTEM UI --- */
+        /* --- MISSION SYSTEM UI - MINESHAFT MISSION BOARD --- */
+
+        /* Animated ore vein keyframes */
+        @keyframes ore-pulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                filter: brightness(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                filter: brightness(1.5);
+            }
+        }
+
+        @keyframes ore-shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        @keyframes lantern-flicker {
+
+            0%,
+            100% {
+                opacity: 1;
+                filter: drop-shadow(0 0 8px rgba(255, 170, 50, 0.8));
+            }
+
+            25% {
+                opacity: 0.9;
+                filter: drop-shadow(0 0 6px rgba(255, 170, 50, 0.6));
+            }
+
+            50% {
+                opacity: 1;
+                filter: drop-shadow(0 0 12px rgba(255, 170, 50, 1));
+            }
+
+            75% {
+                opacity: 0.95;
+                filter: drop-shadow(0 0 10px rgba(255, 170, 50, 0.7));
+            }
+        }
+
+        @keyframes rivet-shine {
+
+            0%,
+            90%,
+            100% {
+                opacity: 0.6;
+            }
+
+            95% {
+                opacity: 1;
+            }
+        }
+
         .mission-widget {
             position: absolute;
             top: 60px;
-            /* Below HUD - Top Center */
             right: auto;
             left: 50%;
             transform: translateX(-50%);
-            width: 320px;
-            /* Increased from 260px */
-            /* Wider for desktop text */
-            background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
-            /* Premium gradient */
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            /* Refined border */
-            border-radius: 12px;
+            width: 340px;
             z-index: 6000 !important;
-            /* Above UI layer (5000) */
             font-family: var(--font-body);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
-            /* Deeper shadow */
             overflow: visible;
-            /* Changed from hidden to show badge */
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            backdrop-filter: blur(5px);
             display: flex;
             flex-direction: column;
             pointer-events: auto;
-            /* Ensure it captures events */
             user-select: none;
-            /* Prevent accidental text selection while scrolling */
+
+            /* ROCK/SLATE BACKGROUND */
+            background:
+                /* Ore vein overlay */
+                linear-gradient(135deg,
+                    transparent 20%,
+                    rgba(255, 180, 50, 0.05) 25%,
+                    transparent 30%,
+                    transparent 45%,
+                    rgba(0, 230, 200, 0.04) 50%,
+                    transparent 55%,
+                    transparent 70%,
+                    rgba(255, 100, 50, 0.04) 75%,
+                    transparent 80%),
+                /* Rock texture simulation */
+                radial-gradient(ellipse at 20% 30%, rgba(60, 50, 45, 0.9) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(45, 40, 35, 0.9) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(55, 45, 40, 0.8) 0%, transparent 60%),
+                /* Base dark slate */
+                linear-gradient(180deg, #2a2420 0%, #1a1614 50%, #0f0d0c 100%);
+
+            /* REINFORCED METAL FRAME */
+            border: 4px solid transparent;
+            border-image: linear-gradient(180deg,
+                    #6b5a4a 0%,
+                    #4a3f35 20%,
+                    #3d342c 50%,
+                    #4a3f35 80%,
+                    #6b5a4a 100%) 1;
+            border-radius: 8px;
+
+            /* Deep mining shadow */
+            box-shadow:
+                /* Outer metal frame glow */
+                0 0 0 2px #2a241f,
+                0 0 0 4px rgba(107, 90, 74, 0.5),
+                /* Depth shadow */
+                0 15px 40px rgba(0, 0, 0, 0.8),
+                0 5px 15px rgba(0, 0, 0, 0.6),
+                /* Inner rock depth */
+                inset 0 2px 10px rgba(0, 0, 0, 0.5),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Ore vein animated overlay */
+        .mission-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            border-radius: 4px;
+            background:
+                /* Gold ore vein */
+                radial-gradient(ellipse at 15% 25%, rgba(255, 200, 100, 0.15) 0%, transparent 20%),
+                radial-gradient(ellipse at 85% 60%, rgba(255, 180, 50, 0.1) 0%, transparent 15%),
+                /* Cyan gems */
+                radial-gradient(ellipse at 70% 20%, rgba(0, 230, 255, 0.12) 0%, transparent 10%),
+                radial-gradient(ellipse at 25% 75%, rgba(0, 200, 220, 0.08) 0%, transparent 12%);
+            animation: ore-pulse 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        /* Corner rivets */
+        .mission-widget::after {
+            content: '⬡ ⬡';
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            font-size: 8px;
+            color: #8a7a6a;
+            letter-spacing: 2px;
+            text-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.8),
+                0 0 4px rgba(139, 119, 101, 0.3);
+            animation: rivet-shine 8s ease-in-out infinite;
+            z-index: 10;
         }
 
         .mission-widget.can-claim {
-            border-color: #FFD54F;
-            box-shadow: 0 0 20px rgba(255, 213, 79, 0.4), 0 12px 40px rgba(0, 0, 0, 0.7);
+            box-shadow:
+                0 0 0 2px #2a241f,
+                0 0 0 4px rgba(255, 200, 100, 0.6),
+                0 0 30px rgba(255, 180, 50, 0.4),
+                0 15px 40px rgba(0, 0, 0, 0.8),
+                inset 0 0 20px rgba(255, 180, 50, 0.1);
             animation: mission-attention-pulse 2s infinite ease-in-out;
         }
 
@@ -1285,8 +1416,12 @@
 
             50% {
                 transform: translateX(-50%) scale(1.02);
-                border-color: #fff;
-                box-shadow: 0 0 30px rgba(255, 213, 79, 0.6), 0 12px 40px rgba(0, 0, 0, 0.7);
+                box-shadow:
+                    0 0 0 2px #2a241f,
+                    0 0 0 4px rgba(255, 220, 100, 0.8),
+                    0 0 50px rgba(255, 180, 50, 0.6),
+                    0 15px 40px rgba(0, 0, 0, 0.8),
+                    inset 0 0 30px rgba(255, 180, 50, 0.15);
             }
 
             100% {
@@ -1296,24 +1431,27 @@
 
         .mission-badge {
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #FF3D00;
-            color: white;
+            top: -12px;
+            right: -12px;
+            /* Mining lantern style */
+            background: radial-gradient(circle at 30% 30%, #ffaa40, #ff6600);
+            color: #1a0f00;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             display: none;
-            /* Shown via JS */
             justify-content: center;
             align-items: center;
             font-size: 14px;
             font-weight: bold;
             font-family: var(--font-heading);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            border: 2px solid #fff;
+            box-shadow:
+                0 0 15px rgba(255, 150, 50, 0.8),
+                0 4px 10px rgba(0, 0, 0, 0.5),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+            border: 2px solid #8b6914;
             z-index: 6001;
-            animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), lantern-flicker 3s ease-in-out infinite;
         }
 
         @keyframes badge-pop {
@@ -1330,49 +1468,98 @@
             height: auto;
             max-height: 80vh;
             overflow-y: auto;
-            /* Support scrolling on desktop if needed */
         }
 
-        /* MOBILE OVERRIDES (Includes Landscape Phones) */
+        /* MOBILE OVERRIDES */
         @media screen and (max-width: 1024px) {
             .mission-widget {
                 top: 80px !important;
                 right: 10px !important;
                 bottom: auto !important;
                 left: auto !important;
-
-                /* Default Collapsed State: Scaled Down */
                 transform: scale(0.6) !important;
                 transform-origin: top right !important;
-
-                width: 50px !important;
-                height: 50px !important;
-                border-radius: 50%;
+                width: 55px !important;
+                height: 55px !important;
+                border-radius: 50% !important;
                 justify-content: center;
                 align-items: center;
                 cursor: pointer;
                 font-size: 14px !important;
+                /* Proper circular button - MUST have overflow hidden to clip */
+                overflow: hidden !important;
+                border: 3px solid #6b5a4a !important;
+                border-image: none !important;
+                background: radial-gradient(circle at 30% 30%, #3a3230 0%, #2a2420 50%, #1a1614 100%) !important;
+                box-shadow:
+                    0 0 0 2px #2a241f,
+                    0 4px 12px rgba(0, 0, 0, 0.6),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.05) !important;
             }
 
-            /* EXPANDED STATE: Reset Scale & Full Size */
+            .mission-widget::before,
+            .mission-widget::after {
+                display: none;
+            }
+
             .mission-widget.expanded {
                 transform: scale(1.0) !important;
-                /* RESET SCALE */
                 transform-origin: top right !important;
-                width: 240px !important;
-                /* Shrunk from 300px */
+                width: 280px !important;
                 height: auto !important;
-                max-height: 70vh !important;
-                /* Adjusted */
-                border-radius: 12px;
+                max-height: 60vh !important;
+                border-radius: 8px !important;
                 justify-content: flex-start;
                 align-items: stretch;
-                overflow-y: hidden !important;
-                /* Scrolling disabled */
+                /* CRITICAL: Enable touch scrolling */
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
+                touch-action: pan-y !important;
+                overscroll-behavior: contain !important;
+                /* Restore proper backgrounds for expanded */
+                background:
+                    linear-gradient(135deg,
+                        transparent 20%,
+                        rgba(255, 180, 50, 0.05) 25%,
+                        transparent 30%,
+                        transparent 45%,
+                        rgba(0, 230, 200, 0.04) 50%,
+                        transparent 55%,
+                        transparent 70%,
+                        rgba(255, 100, 50, 0.04) 75%,
+                        transparent 80%),
+                    radial-gradient(ellipse at 20% 30%, rgba(60, 50, 45, 0.9) 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 70%, rgba(45, 40, 35, 0.9) 0%, transparent 50%),
+                    radial-gradient(ellipse at 50% 50%, rgba(55, 45, 40, 0.8) 0%, transparent 60%),
+                    linear-gradient(180deg, #2a2420 0%, #1a1614 50%, #0f0d0c 100%) !important;
+                border: 4px solid #5a4a3a !important;
+                box-shadow:
+                    0 0 0 2px #2a241f,
+                    0 15px 40px rgba(0, 0, 0, 0.8),
+                    inset 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            /* Enable swipe scrolling on mission list */
+            .mission-widget.expanded .mission-list-container {
+                touch-action: pan-y !important;
+                -webkit-overflow-scrolling: touch !important;
+                overflow-y: auto !important;
+                max-height: 45vh !important;
+            }
+
+            .mission-widget.expanded .mission-list-container,
+            .mission-widget.expanded .mission-list-container * {
+                touch-action: pan-y !important;
+            }
+
+            .mission-widget.expanded::before {
+                display: block;
             }
 
             .mission-widget.can-claim {
                 animation: mission-attention-pulse-mobile 1.5s infinite ease-in-out;
+                box-shadow: 0 0 20px rgba(255, 180, 50, 0.6);
             }
 
             @keyframes mission-attention-pulse-mobile {
@@ -1382,8 +1569,7 @@
 
                 50% {
                     transform: scale(0.7);
-                    border-color: #fff;
-                    box-shadow: 0 0 25px rgba(255, 213, 79, 0.8);
+                    box-shadow: 0 0 30px rgba(255, 180, 50, 0.8);
                 }
 
                 100% {
@@ -1397,60 +1583,43 @@
             }
 
             .mission-badge {
-                top: -5px;
-                right: -5px;
-                width: 20px;
-                height: 20px;
+                top: -6px;
+                right: -6px;
+                width: 22px;
+                height: 22px;
                 font-size: 12px;
-                animation: badge-pop-mobile 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            }
-
-            @keyframes badge-pop-mobile {
-                0% {
-                    transform: scale(0);
-                }
-
-                100% {
-                    transform: scale(1);
-                }
             }
 
             .mission-widget.expanded .mission-item {
-                padding: 4px 8px;
-                /* Shrunk padding */
-                gap: 2px;
+                padding: 6px 10px;
+                gap: 3px;
             }
 
             .mission-widget.expanded .mission-name {
-                font-size: 0.75rem;
-                /* Shrunk font */
+                font-size: 0.8rem;
             }
 
             .mission-widget.expanded .mission-list-container {
-                padding: 4px;
-                /* Shrunk padding */
-                gap: 4px;
+                padding: 6px;
+                gap: 6px;
             }
 
             .mission-widget.expanded .mission-reward {
-                font-size: 0.7rem;
-                /* Shrunk reward text */
-                padding: 1px 4px;
+                font-size: 0.75rem;
+                padding: 2px 6px;
             }
 
             .btn-claim-mission {
-                padding: 4px 8px;
-                font-size: 0.75rem;
-                margin-top: 2px;
+                padding: 6px 10px;
+                font-size: 0.8rem;
+                margin-top: 4px;
             }
 
-            /* HIDE CONTENT WHEN COLLAPSED */
             .mission-widget:not(.expanded) .mission-info-compact,
             .mission-widget:not(.expanded) .mission-toggle-btn {
                 display: none;
             }
 
-            /* Ensure header fills width when collapsed */
             .mission-widget:not(.expanded) .mission-header-compact {
                 padding: 0;
                 justify-content: center;
@@ -1459,47 +1628,61 @@
             }
         }
 
+        /* WOOD PLANK HEADER */
         .mission-header-compact {
             display: flex;
             align-items: center;
-            padding: 10px 12px;
+            padding: 12px 14px;
             cursor: pointer;
-            gap: 10px;
-            background: linear-gradient(90deg, rgba(255, 193, 7, 0.1), transparent);
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+            /* Wood plank background */
+            background:
+                /* Wood grain lines */
+                repeating-linear-gradient(90deg,
+                    transparent 0px,
+                    transparent 8px,
+                    rgba(0, 0, 0, 0.1) 8px,
+                    rgba(0, 0, 0, 0.1) 9px),
+                /* Wood gradient */
+                linear-gradient(180deg,
+                    #5a4a3a 0%,
+                    #4a3a2a 30%,
+                    #3a2a1a 70%,
+                    #4a3a2a 100%);
+            border-bottom: 3px solid #2a1a0a;
+            box-shadow:
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .mission-header-compact:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background:
+                repeating-linear-gradient(90deg,
+                    transparent 0px,
+                    transparent 8px,
+                    rgba(0, 0, 0, 0.1) 8px,
+                    rgba(0, 0, 0, 0.1) 9px),
+                linear-gradient(180deg,
+                    #6a5a4a 0%,
+                    #5a4a3a 30%,
+                    #4a3a2a 70%,
+                    #5a4a3a 100%);
         }
 
         .mission-icon-main {
-            font-size: 24px;
+            font-size: 26px;
             display: flex;
-            /* Centering fix */
             justify-content: center;
             align-items: center;
-            animation: pulse-mission-icon 2s infinite;
+            animation: lantern-flicker 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 180, 50, 0.6));
         }
 
         @media screen and (max-width: 1024px) {
             .mission-widget:not(.expanded) .mission-icon-main {
-                font-size: 24px !important;
-                /* Normal size inside scaled widget */
-            }
-        }
-
-        @keyframes pulse-mission-icon {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-                filter: drop-shadow(0 0 5px gold);
-            }
-
-            100% {
-                transform: scale(1);
+                font-size: 26px !important;
             }
         }
 
@@ -1507,72 +1690,170 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 4px;
         }
 
         .mission-title-compact {
-            font-size: 0.85rem;
-            color: #fff;
+            font-size: 0.9rem;
+            color: #ffeedd;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.5px;
         }
 
+        /* MINING CART TRACK PROGRESS BAR */
         .mission-progress-bg {
             width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
+            height: 10px;
+            /* Track rails */
+            background:
+                /* Rail ties */
+                repeating-linear-gradient(90deg,
+                    #3a2a1a 0px,
+                    #3a2a1a 4px,
+                    transparent 4px,
+                    transparent 12px),
+                /* Rail bed */
+                linear-gradient(180deg, #1a1410, #2a2420, #1a1410);
+            border-radius: 5px;
             overflow: hidden;
+            border: 1px solid #4a3a2a;
+            box-shadow:
+                inset 0 2px 4px rgba(0, 0, 0, 0.5),
+                0 1px 2px rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        /* Rail lines */
+        .mission-progress-bg::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            background:
+                linear-gradient(180deg,
+                    transparent 0%,
+                    transparent 20%,
+                    #5a5a5a 20%,
+                    #4a4a4a 30%,
+                    transparent 30%,
+                    transparent 70%,
+                    #5a5a5a 70%,
+                    #4a4a4a 80%,
+                    transparent 80%,
+                    transparent 100%);
+            opacity: 0.5;
         }
 
         .mission-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #69F0AE, #00C853);
+            /* Ore filling the cart track */
+            background:
+                linear-gradient(180deg,
+                    #ffcc44 0%,
+                    #ff9922 30%,
+                    #dd7711 70%,
+                    #cc6600 100%);
+            background-size: 200% 100%;
+            animation: ore-shimmer 2s linear infinite;
             width: 0%;
             transition: width 0.5s ease;
+            border-radius: 4px;
+            box-shadow:
+                0 0 10px rgba(255, 180, 50, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        /* Ore sparkles */
+        .mission-progress-fill::after {
+            content: '✦';
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 8px;
+            color: #fff;
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+            animation: ore-pulse 1s ease-in-out infinite;
         }
 
         .mission-toggle-btn {
-            color: var(--accent-gold);
-            font-size: 12px;
+            color: #ffcc88;
+            font-size: 14px;
             transition: transform 0.3s;
+            filter: drop-shadow(0 0 4px rgba(255, 180, 50, 0.4));
         }
 
         .mission-widget.expanded .mission-toggle-btn {
             transform: rotate(180deg);
         }
 
-        /* EXPANDED LIST */
+        /* EXPANDED LIST - CAVE INTERIOR */
         .mission-list-container {
             display: none;
             flex-direction: column;
-            padding: 10px;
-            gap: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            gap: 10px;
+            /* Cave interior darkness */
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(60, 50, 40, 0.3) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
+            border-top: 2px solid #3a2a1a;
+            position: relative;
+            z-index: 1;
         }
 
         .mission-widget.expanded .mission-list-container {
             display: flex;
         }
 
+        /* STONE TABLET MISSION ITEMS */
         .mission-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 10px;
+            /* Stone tablet background */
+            background:
+                /* Stone texture */
+                radial-gradient(ellipse at 30% 30%, rgba(80, 70, 60, 0.5) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 70%, rgba(60, 50, 40, 0.5) 0%, transparent 50%),
+                linear-gradient(145deg, #4a4240 0%, #3a3230 50%, #2a2220 100%);
+            border-radius: 6px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            border: 1px solid transparent;
-            transition: background 0.2s;
+            gap: 6px;
+            /* Chiseled edge effect */
+            border: 1px solid #5a5250;
+            border-bottom: 2px solid #2a2220;
+            border-right: 2px solid #2a2220;
+            transition: all 0.2s;
+            box-shadow:
+                inset 0 1px 2px rgba(255, 255, 255, 0.05),
+                0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .mission-item:hover {
+            background:
+                radial-gradient(ellipse at 30% 30%, rgba(90, 80, 70, 0.5) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 70%, rgba(70, 60, 50, 0.5) 0%, transparent 50%),
+                linear-gradient(145deg, #5a5250 0%, #4a4240 50%, #3a3230 100%);
         }
 
         .mission-item.completed {
-            background: rgba(105, 240, 174, 0.15);
-            border-color: #69F0AE;
-            box-shadow: 0 0 10px rgba(105, 240, 174, 0.2);
+            background:
+                /* Golden ore glow */
+                radial-gradient(ellipse at 50% 50%, rgba(255, 200, 100, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 30%, rgba(80, 70, 60, 0.5) 0%, transparent 50%),
+                linear-gradient(145deg, #4a4540 0%, #3a3530 50%, #2a2520 100%);
+            border-color: #8b7514;
+            box-shadow:
+                0 0 15px rgba(255, 180, 50, 0.3),
+                inset 0 0 10px rgba(255, 180, 50, 0.1),
+                0 3px 8px rgba(0, 0, 0, 0.4);
         }
 
         .mission-item-header {
@@ -1582,90 +1863,161 @@
         }
 
         .mission-name {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: bold;
-            color: #eceff1;
+            color: #eee8e0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        /* GLOWING ORE REWARD */
         .mission-reward {
-            font-size: 0.8rem;
-            color: var(--accent-supercash);
+            font-size: 0.85rem;
+            color: #ffdd88;
             display: flex;
             align-items: center;
-            gap: 4px;
-            background: rgba(0, 230, 118, 0.1);
-            padding: 2px 6px;
+            gap: 5px;
+            /* Ore nugget style */
+            background:
+                linear-gradient(135deg, rgba(255, 180, 50, 0.2) 0%, rgba(200, 120, 0, 0.2) 100%);
+            padding: 4px 8px;
             border-radius: 4px;
+            border: 1px solid rgba(255, 180, 50, 0.4);
+            box-shadow:
+                0 0 8px rgba(255, 180, 50, 0.2),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 4px rgba(255, 200, 100, 0.5);
         }
 
         .mission-status-text {
-            font-size: 0.75rem;
-            color: #B0BEC5;
+            font-size: 0.8rem;
+            color: #b0a89a;
             text-align: right;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
         }
 
+        /* CLAIM BUTTON - TREASURE CHEST STYLE */
         .btn-claim-mission {
-            background: linear-gradient(135deg, #FFD54F, #FF6F00);
+            /* Gold bar gradient */
+            background:
+                linear-gradient(180deg,
+                    #ffd54f 0%,
+                    #ffb300 20%,
+                    #ff8f00 50%,
+                    #ff6f00 80%,
+                    #e65100 100%);
             border: none;
-            color: #3E2723;
+            color: #1a0f00;
             font-weight: bold;
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 5px;
+            margin-top: 6px;
             font-family: var(--font-heading);
             text-transform: uppercase;
-            animation: pulse-claim 1s infinite;
+            letter-spacing: 1px;
+            animation: pulse-claim 1.5s infinite;
             width: 100%;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+            box-shadow:
+                0 4px 15px rgba(255, 150, 0, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+            border-top: 1px solid #ffe082;
+            border-bottom: 2px solid #bf360c;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shine sweep effect */
+        .btn-claim-mission::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: skewX(-20deg);
+            animation: button-shine 3s infinite;
+        }
+
+        @keyframes button-shine {
+
+            0%,
+            60%,
+            100% {
+                left: -100%;
+            }
+
+            80% {
+                left: 150%;
+            }
         }
 
         @keyframes pulse-claim {
             0% {
                 transform: scale(1);
-                box-shadow: 0 0 0 rgba(255, 193, 7, 0);
+                box-shadow: 0 4px 15px rgba(255, 150, 0, 0.4);
             }
 
             50% {
                 transform: scale(1.02);
-                box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+                box-shadow: 0 6px 25px rgba(255, 150, 0, 0.7);
             }
 
             100% {
                 transform: scale(1);
-                box-shadow: 0 0 0 rgba(255, 193, 7, 0);
+                box-shadow: 0 4px 15px rgba(255, 150, 0, 0.4);
             }
+        }
+
+        .btn-claim-mission:hover {
+            background:
+                linear-gradient(180deg,
+                    #ffe082 0%,
+                    #ffc107 20%,
+                    #ffa000 50%,
+                    #ff8f00 80%,
+                    #ff6f00 100%);
         }
 
         /* COMPACT MOBILE OVERRIDE */
         @media screen and (max-width: 600px) {
             .mission-widget {
                 width: 95%;
-                /* Wider on mobile */
                 top: 70px;
             }
         }
 
-        /* POPUP FOR COMPLETION (JUICY) */
+        /* POPUP FOR COMPLETION - TREASURE BURST */
         .mission-complete-overlay {
             position: fixed;
             top: 20%;
             left: 50%;
             transform: translateX(-50%) scale(0);
-            background: radial-gradient(circle, #FFD54F, #FF6F00);
-            padding: 2px;
+            /* Gold ore burst */
+            background:
+                radial-gradient(circle, #ffd54f 0%, #ff9800 40%, #6b4a14 100%);
+            padding: 3px;
             border-radius: 12px;
             z-index: 9000;
             pointer-events: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow:
+                0 0 60px rgba(255, 180, 50, 0.6),
+                0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .mission-complete-inner {
-            background: #212121;
-            border-radius: 10px;
+            /* Cave/rock interior */
+            background:
+                radial-gradient(ellipse at 50% 30%, rgba(60, 50, 40, 0.9) 0%, transparent 60%),
+                linear-gradient(180deg, #2a2420, #1a1614);
+            border-radius: 9px;
             padding: 20px 40px;
             text-align: center;
-            color: white;
+            color: #ffeedd;
             font-family: var(--font-heading);
+            border: 1px solid rgba(255, 180, 50, 0.3);
         }
 
         .anim-mission-pop {
@@ -5349,6 +5701,82 @@
                 opacity: 0;
             }
         }
+
+        /* --- STREAK TIMER --- */
+        .streak-timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            margin-left: auto;
+            /* Push to right */
+            cursor: pointer;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s;
+            padding-right: 10px;
+        }
+
+        .streak-timer-container:hover {
+            transform: scale(1.05);
+        }
+
+        .streak-timer-label {
+            font-size: 0.7rem;
+            color: #B0BEC5;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .streak-timer-text {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: #FFD54F;
+            background: linear-gradient(180deg, #FFD54F, #FF8F00);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(255, 213, 79, 0.5));
+        }
+
+        .streak-timer-text.ready {
+            color: #69F0AE;
+            background: linear-gradient(180deg, #69F0AE, #00C853);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse-ready 1s infinite alternate;
+        }
+
+        @keyframes pulse-ready {
+            from {
+                filter: drop-shadow(0 0 5px #69F0AE);
+                transform: scale(1);
+            }
+
+            to {
+                filter: drop-shadow(0 0 15px #69F0AE);
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes pulse-house {
+            0% {
+                transform: scale(1.1);
+            }
+
+            50% {
+                transform: scale(1.15);
+                filter: brightness(1.2);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        .pulse-house {
+            animation: pulse-house 1s infinite ease-in-out;
+        }
     </style>
 </head>
 
@@ -5453,6 +5881,186 @@
                     <div id="monster-layer"></div>
 
                     <div id="monster-layer"></div>
+
+                    <!-- STREAK HOUSE (World Object) -->
+                    <!-- Position: Sits on Grass (y=180). Height ~120px -> Top = 60px. Left = 650px (Left of Elevator) -->
+                    <div id="streak-house" class="streak-house" onclick="game.streakManager.showUI()"
+                        style="position: absolute; top: 110px; left: 280px; width: 90px; height: 90px; z-index: 15; cursor: pointer; transition: transform 0.2s;">
+
+                        <!-- Floating Timer (Always visible) -->
+                        <div id="streak-house-timer-container"
+                            style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); width: 150px; text-align: center; pointer-events: none; z-index: 20;">
+                            <div class="streak-timer-label"
+                                style="font-size: 0.6rem; color: #ECEFF1; text-shadow: 0 1px 2px rgba(0,0,0,0.8); background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px; display: inline-block;">
+                                NEXT REWARD</div>
+                            <div id="streak-house-timer"
+                                style="font-family: var(--font-heading); font-size: 1.1rem; color: #FFD54F; text-shadow: 0 2px 4px rgba(0,0,0,0.8); margin-top: 2px;">
+                                --:--:--</div>
+                        </div>
+
+                        <!-- TREASURE COTTAGE (Schatzhütte) -->
+                        <svg width="100%" height="100%" viewBox="0 0 120 120" style="overflow:visible;">
+                            <defs>
+                                <!-- Luxurious Wood Gradient -->
+                                <linearGradient id="luxWoodGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8B5A2B" />
+                                    <stop offset="50%" style="stop-color:#6B4423" />
+                                    <stop offset="100%" style="stop-color:#4A2F17" />
+                                </linearGradient>
+                                <!-- Golden Roof Gradient -->
+                                <linearGradient id="goldRoofGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#FFD700" />
+                                    <stop offset="40%" style="stop-color:#DAA520" />
+                                    <stop offset="100%" style="stop-color:#B8860B" />
+                                </linearGradient>
+                                <!-- Treasure Window Glow -->
+                                <radialGradient id="treasureGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" style="stop-color:#FFE082" />
+                                    <stop offset="60%" style="stop-color:#FFB300" />
+                                    <stop offset="100%" style="stop-color:#FF8F00" />
+                                </radialGradient>
+                                <!-- Gem Gradient (Ruby) -->
+                                <linearGradient id="rubyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#FF1744" />
+                                    <stop offset="50%" style="stop-color:#D50000" />
+                                    <stop offset="100%" style="stop-color:#9A0007" />
+                                </linearGradient>
+                                <!-- Gem Gradient (Emerald) -->
+                                <linearGradient id="emeraldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#69F0AE" />
+                                    <stop offset="50%" style="stop-color:#00C853" />
+                                    <stop offset="100%" style="stop-color:#00894B" />
+                                </linearGradient>
+                                <!-- Sign Gradient -->
+                                <linearGradient id="treasureSignGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#FFF59D" />
+                                    <stop offset="50%" style="stop-color:#FFD54F" />
+                                    <stop offset="100%" style="stop-color:#FFAB00" />
+                                </linearGradient>
+                                <!-- Golden Glow Filter -->
+                                <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                                <!-- Warm Light Glow -->
+                                <filter id="warmGlow" x="-100%" y="-100%" width="300%" height="300%">
+                                    <feGaussianBlur stdDeviation="4" result="blur" />
+                                    <feFlood flood-color="#FFB300" flood-opacity="0.6" />
+                                    <feComposite in2="blur" operator="in" />
+                                    <feMerge>
+                                        <feMergeNode />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <!-- Ground Shadow -->
+                            <ellipse cx="60" cy="118" rx="48" ry="7" fill="rgba(0,0,0,0.4)" />
+
+                            <!-- Luxurious Wooden Walls -->
+                            <rect x="18" y="46" width="84" height="72" rx="3" fill="url(#luxWoodGradient)"
+                                stroke="#3E2723" stroke-width="2" />
+                            <!-- Wood Grain Details -->
+                            <line x1="30" y1="46" x2="30" y2="118" stroke="#5D4037" stroke-width="1.5" opacity="0.4" />
+                            <line x1="45" y1="46" x2="45" y2="118" stroke="#5D4037" stroke-width="1.5" opacity="0.4" />
+                            <line x1="60" y1="46" x2="60" y2="118" stroke="#5D4037" stroke-width="1.5" opacity="0.4" />
+                            <line x1="75" y1="46" x2="75" y2="118" stroke="#5D4037" stroke-width="1.5" opacity="0.4" />
+                            <line x1="90" y1="46" x2="90" y2="118" stroke="#5D4037" stroke-width="1.5" opacity="0.4" />
+                            <!-- Golden Trim (Top) -->
+                            <rect x="18" y="46" width="84" height="5" rx="1" fill="#DAA520" stroke="#B8860B"
+                                stroke-width="0.5" />
+                            <!-- Golden Trim (Bottom) -->
+                            <rect x="18" y="113" width="84" height="5" rx="1" fill="#DAA520" stroke="#B8860B"
+                                stroke-width="0.5" />
+
+                            <!-- Glowing Treasure Windows (Left) -->
+                            <rect x="26" y="58" width="18" height="22" rx="2" fill="url(#treasureGlow)" stroke="#8B4513"
+                                stroke-width="2" filter="url(#warmGlow)" />
+                            <line x1="35" y1="58" x2="35" y2="80" stroke="#6D4C41" stroke-width="1.5" />
+                            <line x1="26" y1="69" x2="44" y2="69" stroke="#6D4C41" stroke-width="1.5" />
+                            <!-- Window Sparkle -->
+                            <circle cx="31" cy="63" r="1.5" fill="#FFFFFF" opacity="0.8" />
+
+                            <!-- Glowing Treasure Windows (Right) -->
+                            <rect x="76" y="58" width="18" height="22" rx="2" fill="url(#treasureGlow)" stroke="#8B4513"
+                                stroke-width="2" filter="url(#warmGlow)" />
+                            <line x1="85" y1="58" x2="85" y2="80" stroke="#6D4C41" stroke-width="1.5" />
+                            <line x1="76" y1="69" x2="94" y2="69" stroke="#6D4C41" stroke-width="1.5" />
+                            <!-- Window Sparkle -->
+                            <circle cx="81" cy="63" r="1.5" fill="#FFFFFF" opacity="0.8" />
+
+                            <!-- Luxurious Door -->
+                            <rect x="48" y="75" width="24" height="43" rx="3" fill="#3E2723" stroke="#FFD700"
+                                stroke-width="2" />
+                            <rect x="51" y="78" width="18" height="37" rx="2" fill="#5D4037" />
+                            <!-- Door Arch Detail -->
+                            <path d="M51 78 Q60 70 69 78" fill="none" stroke="#DAA520" stroke-width="1.5" />
+                            <!-- Door Planks -->
+                            <line x1="56" y1="78" x2="56" y2="115" stroke="#4E342E" stroke-width="1" opacity="0.6" />
+                            <line x1="64" y1="78" x2="64" y2="115" stroke="#4E342E" stroke-width="1" opacity="0.6" />
+                            <!-- Golden Door Handle -->
+                            <circle cx="65" cy="98" r="3" fill="#FFD700" stroke="#B8860B" stroke-width="1"
+                                filter="url(#goldGlow)" />
+                            <circle cx="65" cy="98" r="1.2" fill="#FFF8E1" />
+
+                            <!-- Golden Roof -->
+                            <path d="M8 48 L60 -2 L112 48 Z" fill="url(#goldRoofGradient)" stroke="#8B6914"
+                                stroke-width="2" />
+                            <!-- Roof Tile Lines -->
+                            <path d="M18 42 L60 5 L102 42" fill="none" stroke="#B8860B" stroke-width="1"
+                                opacity="0.6" />
+                            <path d="M26 36 L60 10 L94 36" fill="none" stroke="#DAA520" stroke-width="0.5"
+                                opacity="0.5" />
+                            <!-- Roof Highlight -->
+                            <path d="M14 46 L60 2 L75 14" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="3" />
+                            <!-- Roof Shadow -->
+                            <path d="M8 48 L60 -2 L112 48" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="4"
+                                transform="translate(0,3)" />
+
+                            <!-- STREAK Sign (Treasure Style) -->
+                            <rect x="24" y="16" width="72" height="28" rx="5" fill="url(#treasureSignGradient)"
+                                stroke="#B8860B" stroke-width="2" filter="url(#goldGlow)" />
+                            <rect x="24" y="16" width="72" height="7" rx="3" fill="rgba(255,255,255,0.4)" />
+                            <text x="60" y="36" text-anchor="middle" font-family="Arial Black, sans-serif"
+                                font-weight="900" font-size="14" fill="#5D4037" letter-spacing="2">STREAK</text>
+                            <!-- Sign Corner Gems -->
+                            <polygon points="30,30 33,25 36,30 33,35" fill="url(#rubyGradient)" stroke="#8B0000"
+                                stroke-width="0.5" />
+                            <polygon points="84,30 87,25 90,30 87,35" fill="url(#emeraldGradient)" stroke="#005B2E"
+                                stroke-width="0.5" />
+
+                            <!-- Decorative Gold Coins -->
+                            <circle cx="25" cy="110" r="4" fill="#FFD700" stroke="#B8860B" stroke-width="1" />
+                            <text x="25" y="112" text-anchor="middle" font-size="5" fill="#8B6914"
+                                font-weight="bold">$</text>
+                            <circle cx="95" cy="110" r="4" fill="#FFD700" stroke="#B8860B" stroke-width="1" />
+                            <text x="95" y="112" text-anchor="middle" font-size="5" fill="#8B6914"
+                                font-weight="bold">$</text>
+                            <circle cx="20" cy="100" r="3" fill="#FFD700" stroke="#B8860B" stroke-width="0.5"
+                                opacity="0.8" />
+                            <circle cx="100" cy="100" r="3" fill="#FFD700" stroke="#B8860B" stroke-width="0.5"
+                                opacity="0.8" />
+
+                            <!-- Treasure Chest Hint at Door -->
+                            <rect x="52" y="105" width="16" height="10" rx="2" fill="#8B4513" stroke="#5D4037"
+                                stroke-width="1" />
+                            <rect x="52" y="105" width="16" height="3" rx="1" fill="#A0522D" />
+                            <circle cx="60" cy="110" r="1.5" fill="#FFD700" />
+
+                            <!-- Sparkle Effects -->
+                            <circle cx="35" cy="52" r="1" fill="#FFFFFF" opacity="0.9" />
+                            <circle cx="85" cy="52" r="1" fill="#FFFFFF" opacity="0.9" />
+                            <circle cx="60" cy="8" r="1.5" fill="#FFFFFF" opacity="0.8" />
+                        </svg>
+
+                        <!-- Glow Effect (Hidden by default) -->
+                        <div id="streak-house-glow"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255, 213, 79, 0.4) 0%, transparent 70%); opacity: 0; transition: opacity 0.5s; pointer-events: none;">
+                        </div>
+                    </div>
 
                     <!-- Warehouse Visual -->
                     <!-- Lifted up to sit on grass. Grass is at 180px relative to wrapper. top:-20px relative to wrapper? No.
@@ -9044,6 +9652,9 @@
                 if (this.game.shafts.length === 0) this.game.buyShaft();
                 const mw = document.querySelector('.mission-widget');
                 if (mw) mw.classList.remove('hidden');
+                // Show Streak House after tutorial
+                const sh = document.getElementById('streak-house');
+                if (sh) sh.style.display = 'block';
             }
 
             complete() {
@@ -9053,6 +9664,10 @@
 
                 // SAFETY: Ensure audio is un-ducked even if we skipped steps
                 if (this.game.audio) this.game.audio.duckSFX(false);
+
+                // Show Streak House after tutorial
+                const sh = document.getElementById('streak-house');
+                if (sh) sh.style.display = 'block';
 
                 setTimeout(() => {
                     if (this.container) this.container.classList.remove('active');
@@ -9479,6 +10094,52 @@
                 this.firstLaunchTime = data.firstLaunchTime || Date.now();
             }
 
+            updateTimer() {
+                const timerText = document.getElementById('streak-house-timer');
+                const house = document.getElementById('streak-house');
+                const houseGlow = document.getElementById('streak-house-glow');
+
+                if (!timerText) return;
+
+                if (!this.claimedToday) {
+                    timerText.innerText = "READY!";
+                    timerText.style.color = "#69F0AE";
+                    timerText.style.textShadow = "0 0 10px #69F0AE";
+
+                    if (house) {
+                        if (!house.classList.contains('pulse-house')) {
+                            house.classList.add('pulse-house');
+                            house.style.transform = "scale(1.1)";
+                        }
+                    }
+                    if (houseGlow) houseGlow.style.opacity = '1';
+
+                } else {
+                    timerText.style.color = "#FFD54F";
+                    timerText.style.textShadow = "0 2px 4px rgba(0,0,0,0.8)";
+
+                    if (house) {
+                        house.classList.remove('pulse-house');
+                        house.style.transform = "scale(1)";
+                    }
+                    if (houseGlow) houseGlow.style.opacity = '0';
+
+                    // Countdown to midnight
+                    const now = new Date();
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+
+                    const diff = tomorrow - now;
+
+                    const h = Math.floor(diff / (1000 * 60 * 60));
+                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    timerText.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                }
+            }
+
             getSaveData() {
                 return {
                     lastLoginTime: this.lastLoginTime,
@@ -9523,10 +10184,12 @@
                 if (this.shafts.length === 0 && !this.tutorialDone) {
                     this.tutorial.start();
                     this.money = 2000;
-                    // Hide Missions initially
+                    // Hide Missions and Streak House initially
                     setTimeout(() => {
                         const mw = document.querySelector('.mission-widget');
                         if (mw) mw.classList.add('hidden');
+                        const sh = document.getElementById('streak-house');
+                        if (sh) sh.style.display = 'none';
                     }, 100);
                 }
 
@@ -11089,6 +11752,7 @@
                 if (this.weather) this.weather.update(dt); // Update Weather
                 if (this.missions) this.missions.checkProgress();
                 if (this.tutorial) this.tutorial.update(dt); // Tutorial Update
+                if (this.streakManager) this.streakManager.updateTimer(); // Streak Timer
 
                 // Apply Boosts
                 let speedMult = 1 + (this.boosts.speed * 0.1);
