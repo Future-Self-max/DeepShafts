@@ -7,17 +7,14 @@
     <title>DeepShafts</title>
     <link rel="manifest" href="manifest.json">
 
-    <!-- Sehr wichtig für Android/Chrome: -->
-    <meta name="theme-color" content="#000000"> <!-- Oder deine Hintergrundfarbe -->
+    <meta name="theme-color" content="#000000">
 
-    <!-- Für iOS (falls du auch iPhone testen willst): -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel="apple-touch-icon" href="Logo.jpg"> <!-- Dein Icon in 192×192 -->
+    <link rel="apple-touch-icon" href="Logo.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@700&display=swap');
 
-        /* --- MOBILE OPTIMIZATION --- */
         #orientation-warning {
             position: fixed;
             top: 0;
@@ -68,7 +65,6 @@
             }
         }
 
-        /* --- HOLO-CAROUSEL STYLES --- */
         .holo-overlay {
             position: fixed;
             top: 0;
@@ -78,7 +74,6 @@
             background: radial-gradient(circle at center, rgba(20, 30, 40, 0.95), #000);
             z-index: 9999;
             display: none;
-            /* Flex when active */
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -93,7 +88,6 @@
             position: relative;
             width: 100%;
             height: 50vh;
-            /* Relative to viewport height */
             min-height: 250px;
             max-height: 500px;
             display: flex;
@@ -103,14 +97,11 @@
             overflow: visible;
             touch-action: none;
             margin-bottom: 20px;
-            /* Space for button */
         }
 
         .holo-spinner {
             position: relative;
-            /* Scale based on stage height/width */
             width: 30vh;
-            /* Portrait ratio approx */
             height: 44vh;
             max-width: 220px;
             max-height: 320px;
@@ -132,7 +123,6 @@
             align-items: center;
             justify-content: center;
             gap: 5%;
-            /* Relative gap */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             backface-visibility: hidden;
             transition: all 0.5s ease-out;
@@ -236,7 +226,6 @@
             box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
             cursor: pointer;
             text-transform: uppercase;
-            /* Dopamine Pulse Animation */
             animation: dopaminePulse 2s infinite ease-in-out;
             width: 90%;
             max-width: 300px;
@@ -261,9 +250,7 @@
 
         .btn-holo-claim:hover {
             animation: none;
-            /* Pause pulse on hover to show feedback */
             transform: scale(1.08);
-            /* Slightly bigger */
             filter: brightness(1.1);
         }
 
@@ -278,7 +265,6 @@
 
         @media screen and (max-width: 768px) {
 
-            /* Mobile Adjustments */
             .holo-card .day-label {
                 font-size: 1.1rem;
             }
@@ -298,13 +284,11 @@
             .holo-spinner {
                 width: 35vw;
                 height: 50vw;
-                /* Scales with width on portrait, but we want VH constraints */
                 max-width: 160px;
                 max-height: 240px;
             }
         }
 
-        /* Landscape Mobile Specifics */
         @media screen and (max-height: 500px) {
             .holo-stage {
                 height: 50vh;
@@ -338,12 +322,10 @@
             }
         }
 
-        /* Responsive UI Overrides */
         @media screen and (max-width: 1024px) {
             .hud-top {
                 gap: 5px;
                 padding: 5px 10px;
-                /* Even closer to corners */
                 justify-content: space-between;
             }
 
@@ -372,7 +354,6 @@
             .popup-panel,
             .popup-panel * {
                 touch-action: manipulation !important;
-                /* Allow scrolling and interaction */
             }
 
             .research-panel {
@@ -402,7 +383,6 @@
             }
         }
 
-        /* --- DOPAMINE EFFECTS --- */
         @keyframes shakeHard {
             0% {
                 transform: translate(1px, 1px) rotate(0deg);
@@ -477,7 +457,6 @@
             }
         }
 
-        /* --- TOMORROW PREVIEW STYLES --- */
         .holo-preview-container {
             display: flex;
             flex-direction: column;
@@ -488,7 +467,6 @@
             width: 100%;
             height: 100%;
             background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8));
-            /* Vignette */
             z-index: 10;
         }
 
@@ -525,12 +503,10 @@
             position: relative;
             overflow: hidden;
             animation: zoomIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            /* Pop in */
             flex-shrink: 0;
             backdrop-filter: blur(15px);
         }
 
-        /* Spinning Ray effect behind card */
         .preview-card::before {
             content: '';
             position: absolute;
@@ -543,7 +519,6 @@
             pointer-events: none;
         }
 
-        /* Shine swipe */
         .preview-card::after {
             content: '';
             position: absolute;
@@ -669,7 +644,6 @@
             }
         }
 
-        /* --- MOBILE OPTIMIZATION FOR PREVIEW --- */
         @media screen and (max-width: 768px) {
             .preview-header {
                 font-size: 2.2rem;
@@ -706,7 +680,6 @@
             }
         }
 
-        /* LANDSCAPE MOBILE */
         @media screen and (max-height: 500px) {
             .holo-preview-container {
                 flex-direction: column;
@@ -776,7 +749,6 @@
             --font-heading: 'Fredoka One', cursive;
             --font-body: 'Roboto', sans-serif;
 
-            /* GLASSMORPHISM VARS */
             --glass-bg: rgba(255, 255, 255, 0.15);
             --glass-border: rgba(255, 255, 255, 0.2);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -890,61 +862,7 @@
             scrollbar-color: #FFC107 #1a0f0d;
         }
 
-        /* --- WEATHER PARTICLES --- */
-        .weather-particle {
-            position: absolute;
-            pointer-events: none;
-            z-index: 100;
-            /* Above ground, below HUD */
-        }
 
-        .raindrop {
-            width: 2px;
-            height: 15px;
-            background: rgba(174, 194, 224, 0.6);
-            animation: fall-rain linear infinite;
-        }
-
-        .snowflake {
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            filter: blur(1px);
-            animation: fall-snow linear infinite;
-        }
-
-        @keyframes fall-rain {
-            0% {
-                transform: translateY(-100px) rotate(15deg);
-            }
-
-            100% {
-                transform: translateY(110vh) rotate(15deg);
-            }
-        }
-
-        @keyframes fall-snow {
-            0% {
-                transform: translateY(-50px) translateX(0);
-            }
-
-            25% {
-                transform: translateY(25vh) translateX(20px);
-            }
-
-            50% {
-                transform: translateY(50vh) translateX(-20px);
-            }
-
-            75% {
-                transform: translateY(75vh) translateX(20px);
-            }
-
-            100% {
-                transform: translateY(110vh) translateX(0);
-            }
-        }
 
         body {
             margin: 0;
@@ -5778,6 +5696,18 @@
             animation: pulse-house 1s infinite ease-in-out;
         }
     </style>
+    <style>
+        /* --- PARTICLE CANVAS --- */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9000;
+        }
+    </style>
 </head>
 
 <body>
@@ -5862,6 +5792,7 @@
     <!-- MAIN GAME CONTAINER -->
     <div id="world-container">
         <div id="game-world">
+            <canvas id="particle-canvas"></canvas>
             <div id="game-stage">
                 <!-- Backgrounds (Full width of stage) -->
                 <div class="sky-area">
@@ -9167,13 +9098,14 @@
         class WeatherManager {
             constructor(game) {
                 this.game = game;
-                this.layer = $('.sky-area');
                 this.state = 'CLEAR'; // CLEAR, RAIN, SNOW
                 this.timer = 60 + Math.random() * 120; // 1-3 mins
-                this.particles = [];
-                this.maxParticles = 50;
-                this.spawnRate = 0.2; // Spawn every X seconds
+                this.spawnRate = 0.05; // Spawn much faster now (Canvas is fast!)
                 this.spawnTimer = 0;
+
+                // Snow Accumulation State
+                this.snowCoverage = 0.0;
+                this.grassLayer = document.querySelector('.grass-layer');
             }
 
             update(dt) {
@@ -9188,6 +9120,23 @@
                         this.spawnTimer = 0;
                         this.spawnParticle();
                     }
+                }
+
+                // Dynamic Snow Accumulation
+                const targetCoverage = (this.state === 'SNOW') ? 1.0 : 0.0;
+                const changeRate = 0.1; // Takes ~10 seconds to fully coat/melt
+
+                if (this.snowCoverage < targetCoverage) {
+                    this.snowCoverage = Math.min(this.snowCoverage + changeRate * dt, targetCoverage);
+                } else if (this.snowCoverage > targetCoverage) {
+                    this.snowCoverage = Math.max(this.snowCoverage - changeRate * dt, targetCoverage);
+                }
+
+                // Apply visual effect to grass/ground
+                if (this.grassLayer) {
+                    // Grayscale makes it white/gray, Brightness pumps it up to look like snow
+                    // brightness 1 (normal) -> 4 (bright white snow)
+                    this.grassLayer.style.filter = `grayscale(${this.snowCoverage}) brightness(${1 + this.snowCoverage * 3})`;
                 }
             }
 
@@ -9209,41 +9158,33 @@
                 console.log("Weather changed to:", this.state);
 
                 // Cleanup old particles when clearing or changing
-                if (this.state === 'CLEAR') {
-                    this.clearAllParticles();
-                }
+                // We clear everything and let new weather start fresh
+                this.clearAllParticles();
             }
 
             spawnParticle() {
-                if (this.particles.length >= this.maxParticles) {
-                    const old = this.particles.shift();
-                    old.remove();
+                // Spawn position: Random X, Top Y (-50)
+                const startX = Math.random() * window.innerWidth;
+                const startY = -50;
+
+                // Spawn multiple for density if needed
+                if (this.state === 'RAIN') {
+                    this.game.particleSystem.spawn(startX, startY, 'RAIN');
+                    // Spawn a second one for density
+                    this.game.particleSystem.spawn(Math.random() * window.innerWidth, startY, 'RAIN');
+                } else if (this.state === 'SNOW') {
+                    this.game.particleSystem.spawn(startX, startY, 'SNOW', {
+                        size: 2 + Math.random() * 3
+                    });
                 }
-
-                const p = document.createElement('div');
-                p.className = `weather-particle ${this.state === 'RAIN' ? 'raindrop' : 'snowflake'}`;
-
-                // Random horizontal start
-                p.style.left = Math.random() * 100 + '%';
-
-                // Staggered fall duration
-                const duration = this.state === 'RAIN' ? (0.8 + Math.random() * 0.4) : (3 + Math.random() * 4);
-                p.style.animationDuration = duration + 's';
-
-                this.layer.appendChild(p);
-                this.particles.push(p);
-
-                // Auto remove after animation
-                setTimeout(() => {
-                    const idx = this.particles.indexOf(p);
-                    if (idx > -1) this.particles.splice(idx, 1);
-                    p.remove();
-                }, duration * 1000 + 100);
             }
 
             clearAllParticles() {
-                this.particles.forEach(p => p.remove());
-                this.particles = [];
+                // Clear both types to be safe
+                if (this.game.particleSystem) {
+                    this.game.particleSystem.clearParticles('RAIN');
+                    this.game.particleSystem.clearParticles('SNOW');
+                }
             }
 
             setTheme(worldId) {
@@ -10150,6 +10091,209 @@
             }
         }
 
+
+
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particle-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            // Create a particle
+            // Type: 'COIN', 'SPARK', 'RAIN', 'SNOW'
+            spawn(x, y, type, options = {}) {
+                const p = {
+                    x: x,
+                    y: y,
+                    type: type,
+                    life: 1.0, // 0.0 to 1.0
+                    vx: (Math.random() - 0.5) * (options.speed || 5),
+                    vy: (Math.random() - 0.5) * (options.speed || 5),
+                    ...options
+                };
+
+                if (type === 'COIN') {
+                    p.vx = (Math.random() - 0.5) * 10;
+                    p.vy = (Math.random() - 0.5) * 10;
+                    p.grav = 0.5;
+                    p.targetX = options.targetX;
+                    p.targetY = options.targetY;
+                    p.delay = options.delay || 0; // Delay before moving to target
+                    p.phase = 'SCATTER'; // SCATTER -> MOVE
+                } else if (type === 'SPARK') {
+                    p.vx = (Math.random() - 0.5) * 15;
+                    p.vy = (Math.random() - 0.5) * 15;
+                    p.grav = 0.8;
+                    p.drag = 0.95;
+                    p.color = options.color || '#FFD54F';
+                    p.size = Math.random() * 4 + 2;
+                } else if (type === 'RAIN') {
+                    p.vx = -1 + (Math.random() - 0.5) * 0.5; // Slight wind left
+                    p.vy = 15 + Math.random() * 5; // Fast fall
+                    p.grav = 0;
+                    p.color = 'rgba(174, 194, 224, 0.6)';
+                    p.size = 15; // Length
+                    p.life = 100; // Lives until off screen
+                } else if (type === 'SNOW') {
+                    p.vx = Math.sin(Math.random() * Math.PI * 2); // Drift initiation
+                    p.vy = 2 + Math.random() * 2; // Slow fall
+                    p.grav = 0;
+                    p.color = 'rgba(255, 255, 255, 0.8)';
+                    p.size = 2 + Math.random() * 3;
+                    p.life = 100;
+                    p.driftSeed = Math.random() * 100;
+                }
+
+                this.particles.push(p);
+            }
+
+            clearParticles(type) {
+                if (type) {
+                    this.particles = this.particles.filter(p => p.type !== type);
+                } else {
+                    this.particles = [];
+                }
+            }
+
+            update() {
+                if (this.particles.length === 0) return;
+
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    let p = this.particles[i];
+
+                    if (p.type === 'COIN') {
+                        if (p.phase === 'SCATTER') {
+                            p.x += p.vx;
+                            p.y += p.vy;
+                            p.vy += p.grav; // Gravity
+                            p.life -= 0.01; // Scatter duration roughly
+
+                            // Bounce floor (virtual)
+                            if (p.life < 0.5) {
+                                p.phase = 'MOVE';
+                            }
+                        } else if (p.phase === 'MOVE') {
+                            // Move towards target
+                            const dx = p.targetX - p.x;
+                            const dy = p.targetY - p.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < 20) {
+                                this.particles.splice(i, 1);
+                                if (p.onArrive) p.onArrive();
+                                continue;
+                            }
+
+                            // Ease/Lerp
+                            p.x += dx * 0.15;
+                            p.y += dy * 0.15;
+                        }
+
+                        this.drawCoin(p);
+
+                    } else if (p.type === 'SPARK') {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += p.grav;
+                        p.vx *= p.drag;
+                        p.vy *= p.drag;
+                        p.life -= 0.03;
+
+                        if (p.life <= 0) {
+                            this.particles.splice(i, 1);
+                            continue;
+                        }
+
+                        this.drawSpark(p);
+                    } else if (p.type === 'RAIN') {
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        // Check bounds
+                        if (p.y > this.canvas.height) {
+                            this.particles.splice(i, 1);
+                            continue;
+                        }
+
+                        this.drawRain(p);
+                    } else if (p.type === 'SNOW') {
+                        p.vx = Math.sin((Date.now() / 1000) + p.driftSeed) * 0.5; // Gentle sway
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        if (p.y > this.canvas.height) {
+                            this.particles.splice(i, 1);
+                            continue;
+                        }
+
+                        this.drawSnow(p);
+                    }
+                }
+            }
+
+            drawCoin(p) {
+                this.ctx.save();
+                this.ctx.translate(p.x, p.y);
+                this.ctx.scale(0.5, 0.5); // Coin sprite scale
+                // Simple Gold Circle for now or Draw Emoji? Emojis are slow on canvas sometimes?
+                // Let's draw a nice vector coin
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, 15, 0, Math.PI * 2);
+                this.ctx.fillStyle = '#FFD54F';
+                this.ctx.fill();
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = '#FFA000';
+                this.ctx.stroke();
+
+                // Shine
+                this.ctx.beginPath();
+                this.ctx.arc(-5, -5, 5, 0, Math.PI * 2);
+                this.ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                this.ctx.fill();
+
+                this.ctx.restore();
+            }
+
+            drawSpark(p) {
+                this.ctx.save();
+                this.ctx.globalAlpha = p.life;
+                this.ctx.translate(p.x, p.y);
+                this.ctx.fillStyle = p.color;
+                this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                this.ctx.restore();
+            }
+
+            drawRain(p) {
+                this.ctx.save();
+                this.ctx.strokeStyle = p.color;
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.moveTo(p.x, p.y);
+                this.ctx.lineTo(p.x + p.vx * 2, p.y + p.size);
+                this.ctx.stroke();
+                this.ctx.restore();
+            }
+
+            drawSnow(p) {
+                this.ctx.save();
+                this.ctx.fillStyle = p.color;
+                this.ctx.beginPath();
+                this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.restore();
+            }
+        }
+
         class Game {
             constructor() {
                 this.audio = new AudioSystem();
@@ -10169,12 +10313,15 @@
                 this.boosts = { speed: 0, earnings: 0 }; // Init Levels (0-10)
                 this.soundEnabled = true;
                 this.tutorialDone = false; // New flag for persistence
+                this.shopTab = 'CASH'; // CASH or CORE
+                this.shopUpgrades = { mgrDiscount: 0, offlineEx: 0, relicChanceBoost: 0 };
 
                 this.lastSaveTime = Date.now();
 
                 this.dayNight = new DayNightManager(); // Day Night Init
                 this.research = new ResearchTree(); // Research Tree Init
                 this.weather = new WeatherManager(this); // Weather Init
+                this.particleSystem = new ParticleSystem(); // Particle System Init
 
                 this.tutorial = new TutorialManager(this); // Init Tutorial
                 this.streakManager = new StreakManager(this); // Init StreakManager
@@ -10342,7 +10489,8 @@
                 this.showConfirm("CORE INFUSION", `Reset current progress for ${fragGain} Core Fragments? Each fragment grants a permanent +5% earnings boost.`, "🎇").then(confirmed => {
                     if (confirmed) {
                         this.coreFragments += fragGain;
-                        this.prestigeMult = 1 + (this.coreFragments * 0.05);
+                        this.prestigeMult = 1 + (this.coreFragments * 0.05); // Recalculate based on total
+
                         this.money = 2000;
                         this.shafts = [];
                         this.elevator.loadState(1);
@@ -10368,7 +10516,10 @@
             }
 
             discoverRelic() {
-                if (Math.random() > 0.002) return; // 0.2% chance
+                // Base 0.2% + 0.1% per level
+                const chance = 0.002 + (this.shopUpgrades.relicChanceBoost * 0.001);
+                if (Math.random() > chance) return;
+
                 const relicTypes = [
                     { name: 'Ancient Cog', boost: 'speed', val: 0.05, icon: '⚙️' },
                     { name: 'Golden Nut', boost: 'earnings', val: 0.05, icon: '🥜' },
@@ -10415,7 +10566,9 @@
                         research: { unlocked: this.research.unlocked }, // SAVE RESEARCH
                         lastSave: this.lastSaveTime,
                         streak: this.streakManager.getSaveData(),
-                        tutorialDone: this.tutorialDone
+                        tutorialDone: this.tutorialDone,
+                        shopUpgrades: this.shopUpgrades
+
                     }));
                 } catch (e) { }
             }
@@ -10441,6 +10594,8 @@
                         this.relics = data.relics || [];
                         if (data.streak) this.streakManager.loadState(data.streak);
                         this.tutorialDone = data.tutorialDone || false;
+                        this.shopUpgrades = data.shopUpgrades || { mgrDiscount: 0, offlineEx: 0, relicChanceBoost: 0 };
+
 
                         this.applyWorldVisuals(this.worldId);
                         this.elevator.loadState(data.eleLvl || 1);
@@ -10486,7 +10641,9 @@
                                     // simplified: count * rate of first miner (assuming identical)
                                     return sum + (s.miners.length * s.miners[0].stats.mineRate * 0.3);
                                 }, 0);
-                                const offlineEarnings = Math.floor(offlineRate * Math.min(elapsed, 1800));
+                                const maxOfflineTime = 1800 + (this.shopUpgrades.offlineEx * 1800); // Base 30m + 30m per level
+                                const offlineEarnings = Math.floor(offlineRate * Math.min(elapsed, maxOfflineTime));
+
                                 if (offlineEarnings > 0) {
                                     this.money += offlineEarnings;
                                     setTimeout(() => this.showWelcomeBack(offlineEarnings, elapsed), 500);
@@ -10534,80 +10691,57 @@
             }
 
             spawnFlyingMoney(startX, startY, count) {
-                const targetEl = $('.currency-pill'); // Target the whole pill or the icon
+                const targetEl = $('.currency-pill');
                 if (!targetEl) return;
 
                 const rect = targetEl.getBoundingClientRect();
-                const targetX = rect.left + 30;
+                const targetX = rect.left + 30; // Approximately center of icon
                 const targetY = rect.top + 20;
 
+                // Convert World Start Coordinates to Screen Coordinates
+                // Assuming startX/startY are relative to game-world content wrapper
+                // similar to how they were calculated before.
+                // However, the Warehouse/Elevator managers pass local coordinates or world coordinates?
+                // Let's assume startX/Y are passed relative to the game wrapper like before.
+
+                const wrapper = document.querySelector('.game-content-wrapper');
+                let finalStartX = startX;
+                let finalStartY = startY;
+
+                if (wrapper) {
+                    const wRect = wrapper.getBoundingClientRect();
+                    finalStartX = wRect.left + startX;
+                    finalStartY = wRect.top + startY;
+                }
+
+                // Spawn particles
                 for (let i = 0; i < count; i++) {
-                    setTimeout(() => {
-                        const coin = document.createElement('div');
-                        coin.className = 'flying-coin';
-                        // Initial position (relative to viewport since it's fixed UI layer effectively, 
-                        // but wait.. createFloatText uses absolute on game-world? No, float-text is 5000 zindex.
-                        // Let's attach coins to UI layer or Body to ensure they are on top of everything.
-                        document.body.appendChild(coin);
-
-                        // We need screen coordinates for startX/Y if game is scrolled.
-                        // startX/Y passed here are likely World Coordinates (inside #game-world).
-                        // #world-container scrolls.
-                        // So we need to convert World -> Screen.
-                        const container = $('#world-container');
-                        const screenX = startX; // Horizontal scroll is usually 0 but we centered it.. wait.
-                        // Wrapper is 1200px centered. startX passed is from Warehouse (t.x ~940).
-                        // #game-content-wrapper margin: 0 auto.
-                        // We need the bounding rect of the wrapper to get true screen X.
-                        const wrapperFn = $('.game-content-wrapper').getBoundingClientRect();
-                        const finalStartX = wrapperFn.left + startX;
-                        const finalStartY = wrapperFn.top + startY; // Scroll is handled here since rect updates with scroll
-
-                        coin.style.left = finalStartX + 'px';
-                        coin.style.top = finalStartY + 'px';
-
-                        // Random scatter
-                        const scatterX = (Math.random() - 0.5) * 40;
-                        const scatterY = (Math.random() - 0.5) * 40;
-
-                        coin.style.transform = `translate(${scatterX}px, ${scatterY}px)`;
-
-                        // Animate
-                        coin.animate([
-                            { left: (finalStartX + scatterX) + 'px', top: (finalStartY + scatterY) + 'px', transform: 'scale(1)' },
-                            { left: targetX + 'px', top: targetY + 'px', transform: 'scale(0.5)' }
-                        ], {
-                            duration: 600 + Math.random() * 200,
-                            easing: 'cubic-bezier(0.5, 0, 0, 1)',
-                            fill: 'forwards'
-                        }).onfinish = () => {
-                            coin.remove();
-                            // Pulse UI
-                            targetEl.classList.remove('pulse');
-                            void targetEl.offsetWidth; // trigger reflow
-                            targetEl.classList.add('pulse');
-                        };
-
-                    }, i * 100);
+                    this.particleSystem.spawn(finalStartX, finalStartY, 'COIN', {
+                        targetX: targetX,
+                        targetY: targetY,
+                        delay: i * 2, // Slight staggered delay
+                        onArrive: () => {
+                            // Pulse UI when coin arrives
+                            if (!targetEl.classList.contains('pulse')) {
+                                targetEl.classList.add('pulse');
+                                setTimeout(() => targetEl.classList.remove('pulse'), 200);
+                            }
+                        }
+                    });
                 }
             }
 
             spawnSparks(screenX, screenY, side) {
+                // Determine direction bias based on side
+                // side 'RIGHT' means wall is on right, sparks fly LEFT (-vx)
+                // side 'LEFT' means wall is on left, sparks fly RIGHT (+vx)
+                // But my ParticleSystem currently overrides vx.
+                // For now, general explosion is fine.
+
                 for (let i = 0; i < 8; i++) {
-                    const spark = document.createElement('div');
-                    spark.className = 'mining-spark';
-
-                    // Random dispersion
-                    const sx = (Math.random() - 0.5) * 80 + (side === 'RIGHT' ? 30 : -30); // Push away from wall
-                    const sy = (Math.random() - 0.5) * 80;
-
-                    spark.style.setProperty('--sx', sx + 'px');
-                    spark.style.setProperty('--sy', sy + 'px');
-                    spark.style.left = screenX + 'px';
-                    spark.style.top = screenY + 'px';
-
-                    document.body.appendChild(spark);
-                    setTimeout(() => spark.remove(), 500);
+                    this.particleSystem.spawn(screenX, screenY, 'SPARK', {
+                        color: Math.random() > 0.5 ? '#FFF' : '#FFD54F'
+                    });
                 }
             }
             openStats() {
@@ -10650,7 +10784,44 @@
 
                 // 1. Total Extraction vs Elevator vs Warehouse
                 const mineEff = Math.min(100, (stats.elePerSec / stats.minePerSec) * 100) || 0;
-                const whEff = Math.min(100, (stats.whPerSec / stats.elePerSec) * 100) || 100;
+
+                // Warehouse Efficiency Logic (Requested Update)
+                // Dependent on Total Mining Output. 
+                // If capacity < output -> 100% efficiency? No, bottleneck.
+                // If capacity > output -> Inefficient (Wasted Money).
+
+                let whEff = 0;
+                let whMsg = '';
+                let whClass = 'diff';
+
+                const target = stats.minePerSec;
+                const current = stats.whPerSec;
+
+                if (target <= 0) {
+                    whEff = 100;
+                    whMsg = 'Efficiency: 100%';
+                } else {
+                    if (current < target) {
+                        // BOTTLENECK: We can't move everything mined.
+                        whEff = (current / target) * 100;
+                        whMsg = '⚠️ BOTTLENECK: Increase Capacity!';
+                        whClass = 'warning';
+                    } else {
+                        // OVER-CAPACITY: We have more than enough.
+                        // Efficiency drops because we wasted money on unused capacity.
+                        // Formula: Required / Available
+                        whEff = (target / current) * 100;
+
+                        if (whEff < 95) {
+                            whMsg = '⚠️ WASTED CAPACITY: Too big!';
+                            // Use warning color for waste too, or maybe a distinct one? 
+                            // 'warning' (red/orange) fits "not efficient".
+                            whClass = 'warning';
+                        } else {
+                            whMsg = 'Efficiency: ' + whEff.toFixed(1) + '% (Optimal)';
+                        }
+                    }
+                }
 
                 html += `
                     <div class="stat-card">
@@ -10668,7 +10839,7 @@
                         <h4>Warehouse Logistics</h4>
                         <div class="val">$${fmt(stats.whPerSec)}/s</div>
                         <div class="efficiency-bar-bg"><div class="efficiency-bar-fill" style="width:${whEff}%"></div></div>
-                        <div class="${whEff < 90 ? 'warning' : 'diff'}">${whEff < 90 ? '⚠️ BOTTLENECK: Need more carts!' : 'Efficiency: ' + whEff.toFixed(0) + '%'}</div>
+                        <div class="${whClass}">${whMsg}</div>
                     </div>
                     <div class="stat-card">
                         <h4>Net Income</h4>
@@ -10766,7 +10937,10 @@
                 let cost = Math.floor(CFG.baseCostShaft * Math.pow(4, this.shafts.length));
 
                 if (this.shafts.length === 0 || this.money >= cost) {
-                    if (this.shafts.length > 0) this.money -= cost;
+                    if (this.shafts.length > 0) {
+                        this.animateExpense(cost, document.querySelector('button[onclick="game.buyShaft()"]'));
+                        this.money -= cost;
+                    }
 
                     // Logic: Alternate sides, but allow buying them in pairs if possible?
                     // For now, just follow the index-based side logic.
@@ -10966,6 +11140,45 @@
                     this.audio.playSFX('error');
                 }
             }
+
+            switchShopTab(tab) {
+                this.shopTab = tab;
+                this.renderModal();
+            }
+
+            buyCoreUpgrade(type) {
+                const costs = {
+                    mgrDiscount: (l) => 10 * (l + 1),
+                    offlineEx: (l) => 5 * (l + 1),
+                    relicChanceBoost: (l) => 20 * (l + 1)
+                };
+
+                const currentLevel = this.shopUpgrades[type];
+                const cost = costs[type](currentLevel);
+
+                if (this.coreFragments >= cost) {
+                    this.showConfirm(
+                        "Spend Core Fragments?",
+                        `Buying this will cost <b>${cost} Core Fragments</b>.<br>Spending fragments reduces your Prestige Multiplier!`,
+                        "🌌"
+                    ).then(confirmed => {
+                        if (confirmed) {
+                            this.coreFragments -= cost;
+                            this.shopUpgrades[type]++;
+
+                            // Recalculate Prestige Multiplier
+                            this.prestigeMult = 1 + (this.coreFragments * 0.05);
+
+                            this.audio.playSFX('upgrade');
+                            this.saveGame();
+                            this.renderModal();
+                        }
+                    });
+                } else {
+                    this.showToast("Not enough Core Fragments!", "error");
+                }
+            }
+
             openShop() {
                 this.modalMode = 'shop';
                 this.audio.duckSFX(true);
@@ -11039,11 +11252,15 @@
 
             performUpgrade() {
                 let success = false;
+                const buyBtn = document.getElementById('popup-buy-btn');
+
                 // Reuse existing logic based on active params
                 if (this.activeUpgradeTarget === 'SHAFT') {
                     let s = this.shafts[this.activeUpgradeId];
-                    if (this.money >= s.getCost()) {
-                        this.money -= s.getCost();
+                    let cost = s.getCost();
+                    if (this.money >= cost) {
+                        this.animateExpense(cost, buyBtn);
+                        this.money -= cost;
                         s.upgrade();
                         success = true;
                     }
@@ -11051,6 +11268,7 @@
                     let e = this.elevator;
                     let cost = Math.floor(CFG.baseCostEle * Math.pow(1.25, e.level));
                     if (this.money >= cost) {
+                        this.animateExpense(cost, buyBtn);
                         this.money -= cost;
                         e.upgrade();
                         success = true;
@@ -11059,6 +11277,7 @@
                     let w = this.warehouse;
                     let cost = Math.floor(CFG.baseCostWH * Math.pow(1.25, w.level));
                     if (this.money >= cost) {
+                        this.animateExpense(cost, buyBtn);
                         this.money -= cost;
                         w.upgrade();
                         success = true;
@@ -11179,17 +11398,27 @@
                     return;
                 }
                 if (this.modalMode === 'shop') {
-                    $('#popup-title').innerText = '🛒 Shop';
-                    $('#popup-stats').innerHTML = `
-                        <div class="shop-grid">
-                            <div class="shop-item" onclick="game.buyBoost('speed')">
-                                <div class="shop-info-btn" onclick="game.toggleShopInfo(event, 'speed')">i</div>
-                                <div class="shop-info-overlay">Increases the speed of miners, elevator, and warehouse. More cycles = more money!</div>
-                                <div class="shop-item-icon">⚡</div>
-                                <div class="shop-item-name">Speed (+10%)</div>
-                                <div style="font-size:0.8rem; color:#B0BEC5; margin-bottom:5px;">Lvl ${this.boosts.speed}/10 (${(1 + this.boosts.speed * 0.1).toFixed(1)}x)</div>
-                                <div class="shop-item-price" style="${this.boosts.speed >= 10 ? 'color:#FFD54F' : ''}">${this.boosts.speed >= 10 ? 'MAX' : '💎 10'}</div>
-                            </div>
+
+                    $('#popup-title').innerHTML = `
+                        🛒 Shop
+                        <div style="display:flex; gap:10px; margin-top:10px; font-size:1rem;">
+                            <div onclick="game.switchShopTab('CASH')" style="cursor:pointer; padding:5px 10px; border-bottom: ${this.shopTab === 'CASH' ? '3px solid #69F0AE' : '3px solid transparent'}; color:${this.shopTab === 'CASH' ? '#FFF' : '#B0BEC5'}">💎 SuperCash</div>
+                            <div onclick="game.switchShopTab('CORE')" style="cursor:pointer; padding:5px 10px; border-bottom: ${this.shopTab === 'CORE' ? '3px solid #E040FB' : '3px solid transparent'}; color:${this.shopTab === 'CORE' ? '#FFF' : '#B0BEC5'}">🌌 Core Fragments</div>
+                        </div>
+                    `;
+
+                    if (this.shopTab === 'CASH') {
+                        $('#popup-stats').innerHTML = `
+                            <div class="shop-grid">
+                                <div class="shop-item" onclick="game.buyBoost('speed')">
+                                    <div class="shop-info-btn" onclick="game.toggleShopInfo(event, 'speed')">i</div>
+                                    <div class="shop-info-overlay">Increases the speed of miners, elevator, and warehouse. More cycles = more money!</div>
+                                    <div class="shop-item-icon">⚡</div>
+                                    <div class="shop-item-name">Speed (+10%)</div>
+                                    <div style="font-size:0.8rem; color:#B0BEC5; margin-bottom:5px;">Lvl ${this.boosts.speed}/10 (${(1 + this.boosts.speed * 0.1).toFixed(1)}x)</div>
+                                    <div class="shop-item-price" style="${this.boosts.speed >= 10 ? 'color:#FFD54F' : ''}">${this.boosts.speed >= 10 ? 'MAX' : '💎 10'}</div>
+                                </div>
+
                             <div class="shop-item" onclick="game.buyBoost('earnings')">
                                 <div class="shop-info-btn" onclick="game.toggleShopInfo(event, 'earnings')">i</div>
                                 <div class="shop-info-overlay">Permanently boosts all earnings by 10% per level. Stackable up to 2x.</div>
@@ -11215,9 +11444,55 @@
                         </div>
                         <p style="text-align:center;color:#69F0AE;font-weight:bold;">Your SuperCash: 💎 ${this.superCash}</p>
                     `;
+                    } else {
+                        // CORE FRAGMENTS TAB
+                        const mgrLvl = this.shopUpgrades.mgrDiscount;
+                        const offLvl = this.shopUpgrades.offlineEx;
+                        const relLvl = this.shopUpgrades.relicChanceBoost;
+
+                        // Costs
+                        const mgrCost = 10 * (mgrLvl + 1);
+                        const offCost = 5 * (offLvl + 1);
+                        const relCost = 20 * (relLvl + 1);
+
+                        $('#popup-stats').innerHTML = `
+                            <div style="text-align:center; margin-bottom:15px; color:#E040FB; font-weight:bold;">
+                                🌌 Fragments: ${this.coreFragments} <span style="font-size:0.8rem; color:#B0BEC5;">(Current Boost: +${(this.coreFragments * 5).toFixed(0)}%)</span>
+                                <div style="font-size:0.75rem; color:#FF5252; margin-top:2px;">⚠️ Spending fragments reduces your active Prestige Multiplier!</div>
+                            </div>
+                            <div class="shop-grid">
+                                <div class="shop-item" onclick="game.buyCoreUpgrade('mgrDiscount')" style="border-color:#BA68C8; background:linear-gradient(135deg, #4A148C, #311B92);">
+                                    <div class="shop-info-btn" onclick="game.toggleShopInfo(event, 'mgrDiscount')">i</div>
+                                    <div class="shop-info-overlay">Reduces the cost of hiring managers by 10% per level.</div>
+                                    <div class="shop-item-icon">👔</div>
+                                    <div class="shop-item-name">Manager Deal</div>
+                                    <div style="font-size:0.8rem; color:#E1BEE7; margin-bottom:5px;">Lvl ${mgrLvl} (-${mgrLvl * 10}%)</div>
+                                    <div class="shop-item-price" style="color:#EA80FC">🌌 ${mgrCost}</div>
+                                </div>
+                                <div class="shop-item" onclick="game.buyCoreUpgrade('offlineEx')" style="border-color:#BA68C8; background:linear-gradient(135deg, #4A148C, #311B92);">
+                                    <div class="shop-info-btn" onclick="game.toggleShopInfo(event, 'offlineEx')">i</div>
+                                    <div class="shop-info-overlay">Extends maximum offline time by 30 minutes per level.</div>
+                                    <div class="shop-item-icon">💤</div>
+                                    <div class="shop-item-name">Time Warp</div>
+                                    <div style="font-size:0.8rem; color:#E1BEE7; margin-bottom:5px;">Lvl ${offLvl} (Max ${(30 + offLvl * 30)}m)</div>
+                                    <div class="shop-item-price" style="color:#EA80FC">🌌 ${offCost}</div>
+                                </div>
+                                <div class="shop-item" onclick="game.buyCoreUpgrade('relicChanceBoost')" style="border-color:#BA68C8; background:linear-gradient(135deg, #4A148C, #311B92);">
+                                    <div class="shop-info-btn" onclick="game.toggleShopInfo(event, 'relicChanceBoost')">i</div>
+                                    <div class="shop-info-overlay">Increases the chance to find Relics by 0.1% per level.</div>
+                                    <div class="shop-item-icon">🗿</div>
+                                    <div class="shop-item-name">Relic Hunter</div>
+                                    <div style="font-size:0.8rem; color:#E1BEE7; margin-bottom:5px;">Lvl ${relLvl} (+${(relLvl * 0.1).toFixed(1)}%)</div>
+                                    <div class="shop-item-price" style="color:#EA80FC">🌌 ${relCost}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
                     $('#popup-buy-btn').style.display = 'none';
                     return;
                 }
+
                 if (this.modalMode === 'settings') {
                     $('#popup-title').innerText = '⚙️ Settings';
                     $('#popup-stats').innerHTML = `
@@ -11641,13 +11916,82 @@
                 setTimeout(() => el.remove(), 1000);
             }
 
+            animateExpense(cost, targetEl) {
+                if (!targetEl || !cost) return;
+
+                // If targetEl is just a selector string (sometimes handy), resolve it
+                if (typeof targetEl === 'string') targetEl = document.querySelector(targetEl);
+                if (!targetEl) return;
+
+                // 1. Get Coordinates
+                const targetRect = targetEl.getBoundingClientRect();
+                const moneyEl = document.querySelector('.currency-pill') || document.getElementById('txt-cash'); // Source
+                if (!moneyEl) return;
+                const moneyRect = moneyEl.getBoundingClientRect();
+
+           
+                const startX = moneyRect.left + moneyRect.width / 2;
+                const startY = moneyRect.top + moneyRect.height / 2;
+
+                const endX = targetRect.left + targetRect.width / 2;
+                const endY = targetRect.top + targetRect.height / 2;
+
+                const floatEl = document.createElement('div');
+                floatEl.className = 'float-text';
+                floatEl.innerText = '-$' + fmt(cost);
+                floatEl.style.left = endX + 'px';
+                floatEl.style.top = endY + 'px';
+                floatEl.style.color = '#ff5252'; // Red for expense
+                floatEl.style.zIndex = '100000'; // On top of modals
+                floatEl.style.position = 'fixed';
+                floatEl.style.pointerEvents = 'none';
+                floatEl.style.fontWeight = 'bold';
+                floatEl.style.textShadow = '0 2px 4px rgba(0,0,0,0.5)';
+                document.body.appendChild(floatEl);
+
+                floatEl.animate([
+                    { transform: 'translate(-50%, -50%) translateY(0)', opacity: 1 },
+                    { transform: 'translate(-50%, -50%) translateY(-50px)', opacity: 0 }
+                ], {
+                    duration: 1000,
+                    easing: 'ease-out',
+                    fill: 'forwards'
+                });
+
+                setTimeout(() => floatEl.remove(), 1000);
+
+                const particleCount = Math.min(10, Math.max(3, Math.floor(Math.log10(cost > 0 ? cost : 10))));
+
+                for (let i = 0; i < particleCount; i++) {
+                    if (this.particleSystem) {
+                        this.particleSystem.spawn(startX, startY, 'COIN', {
+                            targetX: endX,
+                            targetY: endY,
+                            delay: i * 2,
+                            speed: 12, // Faster for spending!
+                            onArrive: () => {
+                                if (targetEl && targetEl.classList && !targetEl.classList.contains('pulse-red')) {
+                                    targetEl.classList.add('pulse-red');
+                                    setTimeout(() => targetEl.classList.remove('pulse-red'), 200);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
             getManagerCost(type, target, id) {
                 let base = MANAGERS[type].cost;
                 if (target === 'SHAFT' && (type === 'JUNIOR' || type === 'SENIOR') && id !== null) {
-                    // Scale Input Cost by Shaft Depth: Base * (2.5 ^ ID)
-                    return Math.floor(base * Math.pow(2.5, id));
+                    base = Math.floor(base * Math.pow(2.5, id));
                 }
+
+                if (this.shopUpgrades && this.shopUpgrades.mgrDiscount > 0) {
+                    base = Math.floor(base * (1 - (this.shopUpgrades.mgrDiscount * 0.1)));
+                }
+
                 return base;
+
             }
 
             openManagerHire(target, id) {
@@ -11661,7 +12005,6 @@
                 const mgrSpec = MANAGERS[type];
                 const cost = this.getManagerCost(type, this.activeUpgradeTarget, this.activeUpgradeId);
 
-                // Check cost
                 if ((mgrSpec.type === 'cash' && this.money >= cost) ||
                     (mgrSpec.type === 'super' && this.superCash >= cost)) {
 
@@ -11679,7 +12022,10 @@
                         this.warehouse.manager.activate(); // AUTO-ACTIVATE
                     }
 
-                    if (mgrSpec.type === 'cash') this.money -= cost;
+                    if (mgrSpec.type === 'cash') {
+                        this.animateExpense(cost, document.querySelector(`.shop-item[onclick*="hireManager('${type}')"]`));
+                        this.money -= cost;
+                    }
                     else this.superCash -= cost;
 
                     this.closeModal();
@@ -11697,12 +12043,10 @@
                 p.style.width = p.style.height = (4 + Math.random() * 6) + 'px';
                 p.style.background = Math.random() > 0.5 ? '#FFD54F' : '#8D6E63';
                 p.style.borderRadius = '50%';
-                // Append to wrapper
                 document.querySelector('.game-content-wrapper').appendChild(p);
                 setTimeout(() => p.remove(), 800);
             }
             updateButtons() {
-                // New Shaft
                 const nextShaftCost = Math.floor(CFG.baseCostShaft * Math.pow(4, this.shafts.length));
                 const btnNewShaft = document.querySelector('button[onclick="game.buyShaft()"]');
                 if (btnNewShaft) {
@@ -11715,7 +12059,6 @@
                     }
                 }
 
-                // Elevator
                 const eleCost = Math.floor(CFG.baseCostEle * Math.pow(1.25, this.elevator.level));
                 const btnEle = $('#btn-ele');
                 if (btnEle) {
@@ -11723,7 +12066,6 @@
                     else btnEle.classList.remove('btn-affordable');
                 }
 
-                // Warehouse
                 const whCost = Math.floor(CFG.baseCostWH * Math.pow(1.25, this.warehouse.level));
                 const btnWh = $('#btn-wh');
                 if (btnWh) {
@@ -11731,7 +12073,6 @@
                     else btnWh.classList.remove('btn-affordable');
                 }
 
-                // INDIVIDUAL SHAFTS (User Request: ALL accessible buttons must react)
                 this.shafts.forEach((s, i) => {
                     const cost = s.getCost();
                     const btn = document.getElementById('btn-shaft-' + i);
@@ -11750,19 +12091,18 @@
                 if (this.monsterManager) this.monsterManager.update(dt);
                 if (this.helicopterManager) this.helicopterManager.update(dt);
                 if (this.weather) this.weather.update(dt); // Update Weather
+                if (this.particleSystem) this.particleSystem.update();
+
                 if (this.missions) this.missions.checkProgress();
                 if (this.tutorial) this.tutorial.update(dt); // Tutorial Update
                 if (this.streakManager) this.streakManager.updateTimer(); // Streak Timer
 
-                // Apply Boosts
                 let speedMult = 1 + (this.boosts.speed * 0.1);
-                // Removed decrement logic for permanent boosts
 
 
-                this.shafts.forEach(s => s.update(dt, speedMult)); // Calls miner updates with manager speed
+                this.shafts.forEach(s => s.update(dt, speedMult));
                 this.elevator.update(dt, speedMult);
                 this.warehouse.update(dt, speedMult);
-                // Random SuperCash drop
                 let scChance = 0.0001 * (this.research ? this.research.multipliers.scChance : 1);
                 if (Math.random() < scChance) {
                     this.superCash += 1;
@@ -11772,7 +12112,6 @@
                 $('#txt-supercash').innerText = this.superCash;
 
 
-                // UI Feedback
                 this.updateButtons();
                 if (document.getElementById('modal-overlay').style.display !== 'none' && this.modalMode === 'stats') {
                     this.renderStats();
@@ -11793,9 +12132,7 @@
             }
         }
         var game = new Game();
-        // Ensure applied perks are calculated (since game var was undefined during constructor)
         game.recalcAll();
-        // --- MOBILE SCALING LOGIC ---
         function updateMobileScaling() {
             const stage = document.getElementById('game-stage');
             const targetWidth = 1400;
@@ -11803,30 +12140,23 @@
             const windowHeight = window.innerHeight;
 
             if (windowWidth < targetWidth || windowHeight < 800) {
-                // Scale to fit width
                 const scale = Math.min(windowWidth / targetWidth, 1);
 
-                // Scale the ENTIRE stage (including backgrounds)
                 stage.style.width = targetWidth + 'px';
-                // Height should be auto or large enough to cover the world
-                stage.style.height = '100vw'; // Fallback
+                stage.style.height = '100vw';
                 stage.style.minHeight = '2000px';
 
                 stage.style.position = 'absolute';
                 stage.style.left = '50%';
                 stage.style.top = '0';
-                // Use translateX to center the 1400px box, then scale
                 stage.style.transform = `translateX(-50%) scale(${scale})`;
                 stage.style.transformOrigin = 'top center';
 
-                // Fix for HUD overlap or displacement
                 const hud = document.getElementById('ui-layer');
                 if (hud) {
-                    // Ensure HUD stays at the top of the actual viewport
                     hud.style.height = windowHeight + 'px';
                 }
             } else {
-                // Reset for PC
                 stage.style.width = '100%';
                 stage.style.minHeight = '100vh';
                 stage.style.left = '0';
@@ -11840,11 +12170,8 @@
         updateMobileScaling();
 
 
-        // --- GLOBAL CLICK SOUND (Safe & Integrated) ---
         document.addEventListener('click', (e) => {
-            // Only play if not clicking a specialized button that handles its own sound
             if (e.target.closest('button') || e.target.closest('.nav-btn') || e.target.closest('.manager-slot')) {
-                // Let the specific handler deal with it if needed, or play a slight click regardless
             }
             if (game && game.audio) {
                 game.audio.playSFX('click');
